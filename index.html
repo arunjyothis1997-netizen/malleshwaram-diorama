@@ -285,7 +285,7 @@ body.all .allview{display:block}
 
 <section class="allview" id="allview" aria-label="Everyone at this time">
   <div class="allgrid">
-    <div class="housebox"><div class="houseinner" id="houseinner"><img src="assets/scene_house.png" alt="The house on 15th Cross"><div class="figs" id="allfigs"></div></div>
+    <div class="housebox"><div class="houseinner" id="houseinner"><img src="scene_house.png" alt="The house on 15th Cross"><div class="figs" id="allfigs"></div></div>
       <div class="tag" id="alltag">Home, 15th Cross</div><div class="clock" id="allclock"></div></div>
     <aside class="away"><h3>Out of the house</h3><p class="sub" id="awaysub"></p><div id="awaylist"></div><p class="asleep" id="asleep"></p></aside>
   </div>
@@ -539,7 +539,7 @@ function placeFigure(layer, R, zone, slotX, pose, eco, lit){
   const hRel = fh / zone.floor * 100;
   fig.style.height = hRel + '%';
   fig.style.bottom = (-(meta.k||0) * hRel) + '%';
-  const src = 'assets/' + pose + '.png';
+  const src = '' + pose + '.png';
   fig.innerHTML = `<img src="${src}" alt="${esc(POSE_LABEL(pose))}"><div class="tint"></div>`;
   const tint = fig.querySelector('.tint');
   tint.style.background = ecoStripes(eco);
@@ -565,7 +565,7 @@ function renderStage(){
       const hPct = 96 * boxR / R;
       if (hPct < 93){ sceneEl.style.top = ((100 - hPct)/2) + '%'; sceneEl.style.bottom = ((100 - hPct)/2) + '%'; }
       else { sceneEl.style.top = ''; sceneEl.style.bottom = ''; } }
-    $('bg').style.visibility = sc.img ? '' : 'hidden'; if (sc.img) $('bg').src = 'assets/' + sc.img + '.png'; else $('bg').removeAttribute('src');
+    $('bg').style.visibility = sc.img ? '' : 'hidden'; if (sc.img) $('bg').src = '' + sc.img + '.png'; else $('bg').removeAttribute('src');
     $('ph').textContent = sc.img ? '' : sc.ph; $('ph').style.display = sc.img ? 'none' : '';
     const figs = $('figs'); figs.innerHTML = '';
     const used = {};
@@ -946,7 +946,7 @@ function introRender(full){
   const c = CAST_INTRO[iIdx], P = PEOPLE[c.p];
   const dim = DIMS[c.pose] || [1,2];
   $('spin').style.setProperty('--ar', dim[0]/dim[1]);
-  $('iFront').src = $('iBack').src = 'assets/' + c.pose + '.png';
+  $('iFront').src = $('iBack').src = '' + c.pose + '.png';
   $('iFront').alt = P.n;
   $('iGen').textContent = c.gen;
   $('iName').textContent = P.n;
@@ -959,7 +959,7 @@ function introRender(full){
   $('roster').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed', i===iIdx));
   if (full){ const sp = $('spin'); sp.classList.remove('full'); void sp.offsetWidth; sp.classList.add('full'); setTimeout(()=>sp.classList.remove('full'), 1150); }
 }
-$('roster').innerHTML = CAST_INTRO.map((c,i)=>`<button type="button" style="background-image:url(assets/${c.head}.png)" aria-label="${esc(PEOPLE[c.p].n)}"><span>${esc(PEOPLE[c.p].n.split(' ')[0])}</span></button>`).join('');
+$('roster').innerHTML = CAST_INTRO.map((c,i)=>`<button type="button" style="background-image:url(${c.head}.png)" aria-label="${esc(PEOPLE[c.p].n)}"><span>${esc(PEOPLE[c.p].n.split(' ')[0])}</span></button>`).join('');
 $('roster').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{ iIdx=i; introRender(true); });
 $('iPrev').onclick = () => { iIdx = (iIdx+CAST_INTRO.length-1)%CAST_INTRO.length; introRender(true); };
 $('iNext').onclick = () => { iIdx = (iIdx+1)%CAST_INTRO.length; introRender(true); };
@@ -1060,7 +1060,7 @@ function renderAll(){
   $('awaysub').textContent = away.length ? `${away.length} of ${people().length} are out at ${fmt(m)}. Click anyone to follow their day.` : `Everyone is at home at ${fmt(m)}.`;
   $('awaylist').innerHTML = away.map(o => {
     const s2 = SCENES[o.place];
-    return `<button type="button" class="acard" data-id="${esc(o.id)}"><div class="thumb" style="background-image:url(assets/${s2.img}.png)"><img src="assets/${o.pose}.png" alt=""></div>
+    return `<button type="button" class="acard" data-id="${esc(o.id)}"><div class="thumb" style="background-image:url(${s2.img}.png)"><img src="${o.pose}.png" alt=""></div>
       <div><b>${esc(PEOPLE[o.who].n)}</b><div class="where">${esc(s2.n)} · since ${fmt(o.m)}</div><div class="what">${esc(o.title)}</div>
       <div class="dots">${o.eco.map(k=>`<span style="background:${ECON[k].c}" title="${ECON[k].n}"></span>`).join('')}</div></div></button>`;
   }).join('');
