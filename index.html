@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Thursday in Malleshwaram — a rainbow-economy diorama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EDE1; --paper2:#EAE1CF; --ink:#1E1A15; --ink2:#5B5246; --line:#CFC3AC;
+  --kraft:#B89B72; --kraft2:#8F7553; --accent:#1E1A15;
+  --serif:'Fraunces', Georgia, serif; --sans:'Instrument Sans', system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{background-image:radial-gradient(rgba(120,95,60,.06) 1px, transparent 1px);background-size:5px 5px}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{display:flex;align-items:flex-end;gap:24px;padding:22px 28px 14px;flex-wrap:wrap}
+.brand{flex:1 1 360px}
+.brand .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 6px}
+.brand h1{font-family:var(--serif);font-weight:800;font-size:clamp(26px,3.2vw,40px);line-height:1.02;margin:0;letter-spacing:-.01em}
+.brand h1 em{font-style:italic;font-weight:400}
+.follow{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.follow .lbl{font-size:12px;color:var(--ink2);margin-right:4px}
+.pill{border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;transition:background .15s,color .15s}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.pill:hover{background:rgba(30,26,21,.08)}
+.pill[aria-pressed="true"]:hover{background:var(--ink)}
+.editbtn{border:1.5px dashed var(--ink);background:#fff8;border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;padding:0 28px}
+@media (max-width:1000px){.layout{grid-template-columns:1fr;padding:0 14px}.top{padding:16px 14px 10px}}
+
+/* ---------- diorama box ---------- */
+.box{position:relative;border-radius:6px;padding:16px;background:linear-gradient(160deg,var(--kraft),var(--kraft2));box-shadow:0 18px 40px -18px rgba(60,40,15,.55),0 2px 0 rgba(255,255,255,.25) inset}
+.box::before{content:"";position:absolute;inset:6px;border:1px dashed rgba(255,255,255,.35);border-radius:3px;pointer-events:none}
+.inner{position:relative;aspect-ratio:1.5;background:linear-gradient(#FBF8F1,#EFE7D6);border-radius:2px;overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.08), inset 0 22px 30px -18px rgba(60,40,15,.45), inset 18px 0 26px -20px rgba(60,40,15,.4), inset -18px 0 26px -20px rgba(60,40,15,.4)}
+.floor{position:absolute;left:0;right:0;bottom:0;height:9%;background:linear-gradient(#E3D7BF,#D6C7AA);box-shadow:inset 0 2px 0 rgba(0,0,0,.06);z-index:0}
+.scene{position:absolute;top:3%;bottom:4%;left:50%;transform:translateX(-50%);aspect-ratio:var(--r);max-width:96%;z-index:1;mix-blend-mode:multiply;overflow:hidden;transition:opacity .45s ease, transform .45s ease}
+.scene.leaving{opacity:0;transform:translateX(-50%) translateY(8px) scale(.985)}
+.scene .bg{position:absolute;inset:0;width:100%;height:100%;transform:translate(calc(var(--px,0)*-5px),calc(var(--py,0)*-4px));transition:transform .2s ease-out, filter .6s}
+.ph{position:absolute;inset:6% 8% 14%;border:2px dashed var(--line);border-radius:6px;display:flex;align-items:flex-start;justify-content:center;padding-top:6%;font-family:var(--serif);font-style:italic;font-size:clamp(14px,1.6vw,20px);color:var(--ink2);text-align:center}
+.sky{position:absolute;inset:0;z-index:5;pointer-events:none;transition:background .8s, opacity .8s;mix-blend-mode:multiply}
+.inner.dusk .sky{background:linear-gradient(#F2B98B 0%, #E9C6A4 45%, transparent 85%);opacity:.55}
+.inner.night .sky{background:linear-gradient(#56609A 0%, #8D8FB5 55%, #C9C1C9 100%);opacity:.38}
+.cam{position:absolute;inset:0;transform-origin:0 0;transition:transform .9s cubic-bezier(.6,.05,.25,1)}
+.zoomout{position:absolute;z-index:7;bottom:16px;right:18px;border:1.5px solid var(--ink);background:#FFFDF8;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;box-shadow:2px 3px 0 rgba(0,0,0,.15)}
+.zoomout[hidden]{display:none}
+.moment{display:block;width:100%;border:1.5px solid var(--ink);border-radius:3px;margin:0 0 12px;background:#fff;box-shadow:3px 4px 0 rgba(0,0,0,.1)}
+.figs{position:absolute;inset:0;z-index:3;transform:translate(calc(var(--px,0)*7px),calc(var(--py,0)*4px));transition:transform .2s ease-out}
+.clip{position:absolute;top:0;overflow:hidden;pointer-events:none}
+.fig{position:absolute;bottom:0;left:50%;transform:translateX(-50%);filter:drop-shadow(4px 5px 0 rgba(50,35,15,.16));animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;pointer-events:auto}
+.fig img{display:block;height:100%;width:auto}
+.fig .tint{position:absolute;inset:0;mix-blend-mode:multiply;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;opacity:0;transition:opacity .5s}
+.fig.lit .tint{opacity:1}
+.fig.dim img{opacity:.92}
+@keyframes pop{from{transform:translateX(-50%) translateY(14px) rotate(-2deg);opacity:0}to{transform:translateX(-50%);opacity:1}}
+.beads{position:absolute;inset:0;z-index:4;pointer-events:none}
+.brow{position:absolute;transform:translateX(-50%);display:flex;gap:4px;pointer-events:auto;flex-wrap:wrap;justify-content:center;max-width:30%}
+.bead{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--ink);padding:0;box-shadow:1px 1px 0 rgba(0,0,0,.25);transition:transform .15s}
+.bead:hover{transform:scale(1.35)}
+.bead.on{transform:scale(1.45);box-shadow:0 0 0 3px rgba(255,255,255,.9),1px 1px 0 rgba(0,0,0,.25)}
+.tag{position:absolute;z-index:6;top:24px;left:26px;background:var(--ink);color:var(--paper);padding:6px 12px 7px;font-family:var(--serif);font-weight:600;font-size:15px;border-radius:2px;transform:rotate(-1.5deg);box-shadow:2px 3px 0 rgba(0,0,0,.2)}
+.clock{position:absolute;z-index:6;top:22px;right:26px;background:#FFFDF8;border:1.5px solid var(--ink);padding:6px 12px;font-family:var(--serif);font-size:20px;font-weight:600;border-radius:2px;transform:rotate(1deg);box-shadow:2px 3px 0 rgba(0,0,0,.15);font-variant-numeric:tabular-nums}
+.clock small{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--ink2);display:block;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- card ---------- */
+.card{background:#FFFDF8;border:1.5px solid var(--ink);border-radius:4px;padding:20px 20px 18px;box-shadow:6px 7px 0 rgba(30,26,21,.12);align-self:start;position:sticky;top:12px}
+.meta{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);display:flex;gap:8px;flex-wrap:wrap}
+.meta b{color:var(--ink)}
+.card h2{font-family:var(--serif);font-size:26px;line-height:1.1;margin:8px 0 10px;font-weight:600}
+.card p.story{font-size:15.5px;line-height:1.55;margin:0 0 14px}
+.chips{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}
+.chip{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.35}
+.sw{flex:0 0 auto;width:18px;height:18px;border-radius:4px;border:1.5px solid var(--ink);margin-top:1px}
+.chip b{font-weight:600}
+.note{font-family:var(--serif);font-style:italic;font-size:15px;border-left:3px solid var(--ink);padding:2px 0 2px 10px;margin:0 0 14px;color:#3a332a}
+.nav{display:flex;gap:8px;margin:4px 0 16px}
+.nav button{flex:1;border:1.5px solid var(--ink);background:transparent;border-radius:8px;padding:8px;font-weight:600;font-size:14px}
+.nav button:hover{background:rgba(30,26,21,.07)}
+.by{font-size:12px;color:var(--ink2);margin:-6px 0 12px}
+.fp h3{font-family:var(--serif);font-size:16px;margin:14px 0 6px;font-weight:600}
+.fp .sub{font-size:12.5px;color:var(--ink2);margin:0 0 8px}
+.bar{display:flex;height:16px;border:1.5px solid var(--ink);border-radius:3px;overflow:hidden;background:#fff}
+.bar span{height:100%;transition:flex-grow .5s}
+.barlbl{display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);margin:4px 0 10px}
+.callout{font-size:13.5px;background:var(--paper2);border-radius:4px;padding:8px 10px;line-height:1.45}
+
+/* ---------- timeline ---------- */
+.timeline{margin:22px 28px 0;background:#FFFDF8;border:1.5px solid var(--ink);border-radius:4px;padding:14px 18px 10px;box-shadow:6px 7px 0 rgba(30,26,21,.12)}
+@media (max-width:1000px){.timeline{margin:18px 14px 0}}
+.tl-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.play{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);display:grid;place-items:center;font-size:15px}
+.tl-head .h{font-family:var(--serif);font-weight:600;font-size:17px}
+.tl-head .s{font-size:13px;color:var(--ink2)}
+.tracks{position:relative;display:grid;grid-template-columns:108px 1fr;row-gap:10px;align-items:center}
+.tname{font-size:13px;font-weight:600}
+.tname small{display:block;font-weight:400;color:var(--ink2);font-size:11.5px}
+.rail{position:relative;height:28px;border-bottom:1.5px solid var(--line)}
+.rail .tb{position:absolute;top:50%;width:15px;height:15px;margin:-8px 0 0 -7.5px;border-radius:50%;border:1.5px solid var(--ink);padding:0;transition:transform .15s}
+.rail .tb:hover{transform:scale(1.4);z-index:2}
+.rail .tb.on{transform:scale(1.6);z-index:3;box-shadow:0 0 0 3px #FFFDF8,0 0 0 4.5px var(--ink)}
+.rail.faded .tb:not(.on){opacity:.45}
+.ticks{position:relative;height:20px;grid-column:2}
+.ticks span{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--ink2);top:3px;font-variant-numeric:tabular-nums}
+.head{position:absolute;top:0;bottom:22px;width:2px;background:var(--ink);pointer-events:none;z-index:4}
+.head::before{content:"";position:absolute;top:-5px;left:-5px;border:6px solid transparent;border-top-color:var(--ink)}
+.scrub{grid-column:2;width:100%;margin:0;accent-color:var(--ink)}
+@media (max-width:700px){.ticks span:nth-child(even){display:none}.tracks{grid-template-columns:64px 1fr}}
+
+.fx{border:1.5px solid var(--ink);border-radius:6px;margin:0 0 14px;background:#FFFDF8;overflow:hidden}
+.fx .fx-h{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--paper);padding:6px 10px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.fx .fx-h span:last-child{font-weight:400;opacity:.8;text-transform:none;letter-spacing:0}
+.fx .fx-b{padding:9px 11px;font-size:13.5px;line-height:1.45}
+.fx .fx-f{margin:0 0 8px;color:#3a332a}
+.fx .fx-arrow{display:flex;align-items:center;gap:6px;margin:0 0 6px;font-size:12px;color:var(--ink2);font-weight:600}
+.fx .fx-arrow i{display:inline-block;width:14px;height:14px;border-radius:50%;border:1.3px solid var(--ink)}
+.fx .fx-s{margin:0 0 8px}
+.fx dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 6px;font-size:12.5px}
+.fx dt{color:var(--ink2)} .fx dd{margin:0}
+.fx .fx-src{font-size:11.5px;color:var(--ink2);margin:0}
+.fx .fx-src a{color:inherit}
+.rail .tb.fx::after{content:"⚡";position:absolute;left:50%;top:-15px;transform:translateX(-50%);font-size:11px;line-height:1}
+.opps{margin:22px 28px 10px}
+.opps>h3{font-family:var(--serif);font-size:22px;font-weight:600;margin:0 0 2px}
+.opps>p{font-size:13.5px;color:var(--ink2);margin:0 0 14px;max-width:70ch}
+.opgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.op{text-align:left;font:inherit;color:inherit;background:#FFFDF8;border:1.5px solid var(--ink);border-radius:6px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.op:hover{box-shadow:3px 3px 0 var(--ink)}
+.op .om{font-size:11.5px;color:var(--ink2);display:flex;gap:8px;flex-wrap:wrap}
+.op .om b{color:var(--ink)}
+.op .ot{font-family:var(--serif);font-weight:600;font-size:16px;line-height:1.2}
+.op .of{font-size:13px;color:#3a332a;line-height:1.4}
+.op .os{font-size:13px;line-height:1.4;border-top:1px dashed var(--line);padding-top:6px}
+.op .oc{display:flex;gap:4px;align-items:center;font-size:11.5px;color:var(--ink2)}
+.op .oc i{width:12px;height:12px;border-radius:50%;border:1.2px solid var(--ink);display:inline-block}
+.scale{display:inline-block;border:1px solid currentColor;border-radius:999px;padding:0 6px;font-size:11px}
+@media (max-width:1000px){.opps{margin:18px 14px 8px}}
+.scrib{position:absolute;width:8.5%;aspect-ratio:1;height:auto;transform:translate(-50%,-50%);border:0;padding:0;background:none;cursor:pointer;z-index:6;pointer-events:auto}
+.scrib svg,.crack svg{width:100%;height:100%;overflow:visible;display:block}
+.scrib path,.crack path{fill:none;stroke:#D7262E;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1s .35s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.crack{position:absolute;height:5%;border:0;padding:0;background:none;cursor:pointer;z-index:6;pointer-events:auto;transform:translateY(-50%)}
+.crack path{stroke-width:2.6}.crack path.c2{stroke-width:1.4}
+.fixed path{stroke:#2F8A3F;stroke-dasharray:5 4;animation:none;stroke-dashoffset:0}
+.fixed path.c2{display:none}
+.scrib .ok,.crack .ok{position:absolute;right:-6px;top:-6px;width:20px;height:20px;border-radius:50%;background:#2F8A3F;color:#fff;font:600 12px/20px var(--sans);text-align:center;display:none}
+.fixed .ok{display:block}
+.crack .ok{right:-10px;top:50%;margin-top:-10px}
+#fxTipBox{position:absolute;z-index:20;transform:translate(-50%,calc(-100% - 10px));width:250px;pointer-events:none;opacity:0;transition:opacity .15s}
+#fxTipBox.on{opacity:1}
+.fxtip{display:block;background:#FFFDF8;border:1.5px solid var(--ink);border-radius:6px;padding:7px 9px;font:13px/1.35 var(--sans);color:var(--ink);text-align:left;box-shadow:3px 3px 0 var(--ink)}
+.fxtip b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+.fxtip i{display:block;font-style:normal;color:var(--ink2);font-size:12px;margin-top:5px}
+.fig.helper{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.fxbtn{margin-top:4px;font:600 13px var(--sans);border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:999px;padding:5px 12px;cursor:pointer}
+.fx.isfixed .fxbtn{background:#FFFDF8;color:var(--ink)}
+.fx.isfixed .fx-h{background:#2F8A3F}
+.fixsw[aria-pressed="true"]{background:#2F8A3F;color:#fff;border-color:#2F8A3F}
+.lighter{font-size:13px;line-height:1.45;background:#E7F2E4;border:1.5px solid #2F8A3F;border-radius:4px;padding:8px 10px;margin:10px 0 0}
+.lighter b{font-weight:600}
+.legend{margin:22px 28px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 18px}
+@media (max-width:1000px){.legend{margin:18px 14px 32px}}
+.legend h3{grid-column:1/-1;font-family:var(--serif);font-size:18px;margin:0 0 2px;font-weight:600}
+.legend .chip{font-size:13px}
+
+/* ---------- drawer ---------- */
+.views{display:flex;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}
+.views button{border:0;background:transparent;padding:8px 14px;font-weight:600;font-size:14px}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.hclock{display:flex;align-items:center;gap:10px;border:1.5px solid var(--ink);border-radius:12px;background:#FFFDF8;padding:6px 10px;box-shadow:3px 4px 0 rgba(30,26,21,.12)}
+.hclock svg{width:42px;height:42px;flex:0 0 auto}
+.hc-body{display:flex;flex-direction:column;gap:2px;min-width:190px}
+.hc-time{font-family:var(--serif);font-weight:600;font-size:19px;font-variant-numeric:tabular-nums;line-height:1}
+.hc-time small{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;margin-left:6px}
+.hc-body input{accent-color:var(--ink);width:100%;margin:0}
+.hc-step{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);background:transparent;font-weight:700;line-height:1}
+body.all .layout,body.all .timeline,body.all .follow{display:none}
+.allview{display:none;padding:0 28px}
+body.all .allview{display:block}
+@media (max-width:1000px){.allview{padding:0 14px}}
+.allgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px}
+@media (max-width:1000px){.allgrid{grid-template-columns:1fr}}
+.housebox{position:relative;border-radius:6px;padding:16px;background:linear-gradient(160deg,var(--kraft),var(--kraft2));box-shadow:0 18px 40px -18px rgba(60,40,15,.55)}
+.houseinner{position:relative;aspect-ratio:var(--r);background:#FBF8F1;overflow:hidden;border-radius:2px}
+.houseinner > img{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:multiply}
+.houseinner .figs{transform:none}
+.houseinner .fig{cursor:pointer}
+.nametag{position:absolute;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px;white-space:nowrap;z-index:5;cursor:pointer;border:0;font-family:var(--sans)}
+.nametag i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;border:1px solid #fff;vertical-align:0}
+.away h3{font-family:var(--serif);font-size:18px;margin:0 0 4px;font-weight:600}
+.away .sub{font-size:13px;color:var(--ink2);margin:0 0 12px}
+.acard{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;background:#FFFDF8;border:1.5px solid var(--ink);border-radius:6px;padding:8px;margin:0 0 10px;box-shadow:3px 4px 0 rgba(30,26,21,.1);cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit}
+.acard:hover{transform:translateY(-1px)}
+.acard .thumb{position:relative;height:84px;border-radius:3px;overflow:hidden;background:#F3EDE1 center/cover}
+.acard .thumb img{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);height:78px;filter:drop-shadow(2px 2px 0 rgba(0,0,0,.15))}
+.acard b{display:block;font-size:14px}
+.acard .where{font-size:12px;color:var(--ink2);letter-spacing:.04em;text-transform:uppercase;margin:2px 0 4px}
+.acard .what{font-size:13.5px;line-height:1.35}
+.acard .dots{display:flex;gap:3px;margin-top:5px}.acard .dots span{width:10px;height:10px;border-radius:50%;border:1px solid var(--ink)}
+.asleep{font-size:13px;color:var(--ink2);margin:6px 0 0}
+.intro{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at 50% 38%,#FBF7EE 0%,#EFE6D3 55%,#D9C9AA 100%);display:grid;grid-template-columns:260px minmax(0,1fr) 340px;gap:28px;padding:28px 36px;overflow:auto;transition:opacity .45s}
+.intro.hide{opacity:0;pointer-events:none}
+.intro h2{font-family:var(--serif);font-weight:800;font-size:clamp(26px,3vw,40px);margin:0 0 4px;line-height:1}
+.intro .k{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin:0 0 14px}
+.roster{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;align-content:start}
+.roster button{aspect-ratio:1;border:1.5px solid var(--ink);border-radius:6px;background:#FFFDF8 no-repeat center 8%/170%;position:relative;overflow:hidden;box-shadow:3px 4px 0 rgba(30,26,21,.12);transition:transform .15s}
+.roster button span{position:absolute;left:0;right:0;bottom:0;background:var(--ink);color:var(--paper);font-size:12px;font-weight:600;padding:3px 0}
+.roster button:hover{transform:translateY(-2px)}
+.roster button[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:3px}
+.stage{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:520px;perspective:1400px}
+.spin{position:relative;height:min(62vh,560px);aspect-ratio:var(--ar,.5);transform-style:preserve-3d;animation:turn 9s linear infinite;margin-bottom:-28px;z-index:2}
+.stage:hover .spin{animation-play-state:paused}
+.spin img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:bottom;backface-visibility:hidden;filter:drop-shadow(5px 6px 0 rgba(50,35,15,.18))}
+.spin img.back{transform:rotateY(180deg) scaleX(-1);filter:brightness(.82) drop-shadow(5px 6px 0 rgba(50,35,15,.18))}
+@keyframes turn{0%{transform:rotateY(-28deg)}50%{transform:rotateY(28deg)}100%{transform:rotateY(-28deg)}}
+.spin.full{animation:spinfull 1.1s cubic-bezier(.3,.7,.3,1)}
+@keyframes spinfull{from{transform:rotateY(-360deg)}to{transform:rotateY(0)}}
+.ped{width:min(46vh,420px);height:70px;border-radius:50%;background:radial-gradient(ellipse at 50% 35%,#C9AE85,#8F7553 70%);box-shadow:0 18px 30px -12px rgba(60,40,15,.6),inset 0 -8px 0 rgba(0,0,0,.18);position:relative;z-index:1}
+.ped::after{content:"";position:absolute;inset:10px 26px;border-radius:50%;border:1.5px dashed rgba(255,255,255,.45)}
+.gen{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink2)}
+.bio{align-self:center}
+.bio h3{font-family:var(--serif);font-weight:800;font-size:34px;margin:0;line-height:1}
+.bio .role{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin:6px 0 12px}
+.bio p{font-size:15px;line-height:1.55;margin:0 0 16px}
+.stat{display:grid;grid-template-columns:62px 1fr 34px;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+.stat .tr{height:9px;border:1.2px solid var(--ink);border-radius:5px;background:#fff;overflow:hidden}
+.stat .tr i{display:block;height:100%;transition:width .6s}
+.stat b{font-weight:600}.stat em{font-style:normal;color:var(--ink2);text-align:right}
+.intro .go{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.intro .go button{border:1.5px solid var(--ink);border-radius:999px;padding:10px 18px;font-weight:600;font-size:14.5px;background:transparent}
+.intro .go .primary{background:var(--ink);color:var(--paper)}
+.arrows{display:flex;gap:10px;margin-top:14px;z-index:3}
+.arrows button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);background:#FFFDF8;font-size:16px}
+@media (max-width:1000px){.intro{grid-template-columns:1fr;padding:18px}.roster{grid-template-columns:repeat(6,1fr)}.stage{min-height:380px}.spin{height:44vh}}
+.meet{border:1.5px solid var(--ink);background:transparent;border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#FFFDF8;border-left:1.5px solid var(--ink);box-shadow:-10px 0 30px rgba(0,0,0,.15);transform:translateX(105%);transition:transform .3s ease;z-index:50;overflow:auto;padding:20px}
+.drawer.open{transform:none}
+.drawer h2{font-family:var(--serif);margin:0 0 4px;font-size:24px}
+.drawer .hint{font-size:13px;color:var(--ink2);line-height:1.45;margin:0 0 14px}
+.drawer label{display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin:12px 0 4px}
+.drawer input,.drawer select,.drawer textarea{width:100%;font:inherit;font-size:14.5px;padding:8px 10px;border:1.5px solid var(--ink);border-radius:6px;background:#fff;color:var(--ink)}
+.drawer textarea{min-height:76px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ecopick{display:flex;flex-wrap:wrap;gap:6px}
+.ecopick button{border:1.5px solid var(--ink);border-radius:999px;padding:5px 10px 5px 6px;background:#fff;font-size:13px;display:flex;align-items:center;gap:6px}
+.ecopick button i{width:14px;height:14px;border-radius:50%;border:1.2px solid var(--ink);display:inline-block}
+.ecopick button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.actions button{border:1.5px solid var(--ink);border-radius:8px;padding:9px 14px;font-weight:600;background:transparent}
+.actions .primary{background:var(--ink);color:var(--paper)}
+.actions .danger{margin-left:auto;border-color:#9b2c1f;color:#9b2c1f}
+.status{font-size:13px;margin-top:10px;min-height:18px}
+.x{position:absolute;top:14px;right:14px;border:0;background:transparent;font-size:24px;line-height:1}
+.banner{margin:0 28px 10px;font-size:13px;color:var(--ink2)}
+.banner:empty{display:none}
+@media (max-width:1000px){.banner{margin:0 14px 8px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <p class="kicker">Sustainability · Assignment 1 · NIFT Mumbai M.Des Sem III</p>
+    <h1>One Thursday in <em>Malleshwaram</em></h1>
+  </div>
+  <div class="views" role="tablist"><button type="button" id="vOne" aria-pressed="true">Follow one</button><button type="button" id="vAll" aria-pressed="false">Everyone</button></div>
+  <div class="follow" id="follow"><span class="lbl">Follow</span></div>
+  <div class="hclock" id="hclock">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="#FFFDF8" stroke="#1E1A15" stroke-width="2"/><g stroke="#1E1A15" stroke-width="1.5">
+      <line x1="20" y1="4.5" x2="20" y2="7.5"/><line x1="20" y1="32.5" x2="20" y2="35.5"/><line x1="4.5" y1="20" x2="7.5" y2="20"/><line x1="32.5" y1="20" x2="35.5" y2="20"/></g>
+      <line id="hHr" x1="20" y1="20" x2="20" y2="11" stroke="#1E1A15" stroke-width="2.6" stroke-linecap="round"/><line id="hMn" x1="20" y1="20" x2="20" y2="7" stroke="#1E1A15" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="20" r="1.8"/></svg>
+    <div class="hc-body"><div class="hc-time" id="hTime"></div><input type="range" id="hRange" min="300" max="1485" step="5" aria-label="Time of day"></div>
+    <button type="button" class="hc-step" id="hBack" aria-label="Previous touchpoint">−</button><button type="button" class="hc-step" id="hFwd" aria-label="Next touchpoint">+</button>
+  </div>
+  <button class="meet" id="meetBtn" type="button">Meet the family</button>
+  <button class="meet" id="oppBtn" type="button" onclick="document.getElementById('opps').scrollIntoView({behavior:'smooth'})">⚡ Opportunities</button>
+  <button class="meet fixsw" id="fixAllBtn" type="button" aria-pressed="false">Fixes: off</button>
+  <button class="editbtn" id="editBtn" type="button">✎ Edit touchpoints</button>
+</header>
+<div class="banner" id="banner"></div>
+
+<section class="allview" id="allview" aria-label="Everyone at this time">
+  <div class="allgrid">
+    <div class="housebox"><div class="houseinner" id="houseinner"><img src="assets/scene_house.png" alt="The house on 15th Cross"><div class="figs" id="allfigs"></div></div>
+      <div class="tag" id="alltag">Home, 15th Cross</div><div class="clock" id="allclock"></div></div>
+    <aside class="away"><h3>Out of the house</h3><p class="sub" id="awaysub"></p><div id="awaylist"></div><p class="asleep" id="asleep"></p></aside>
+  </div>
+</section>
+<main class="layout">
+  <section>
+    <div class="box">
+      <div class="inner" id="inner">
+        <div class="floor"></div><div class="sky"></div>
+        <div class="scene" id="scene"><div class="cam" id="cam"><img class="bg" id="bg" alt=""><div class="ph" id="ph"></div><div class="figs" id="figs"></div><div class="beads" id="beads"></div></div></div>
+        <button class="zoomout" id="zoomBtn" type="button">⤢ Whole house</button><div id="fxTipBox" aria-live="polite"></div>
+      </div>
+      <div class="tag" id="tag"></div>
+      <div class="clock" id="clock"></div>
+    </div>
+  </section>
+  <aside class="card" id="card" aria-live="polite"></aside>
+</main>
+
+<section class="timeline">
+  <div class="tl-head">
+    <button class="play" id="play" type="button" aria-label="Play the day">▶</button>
+    <div><div class="h">The day, touchpoint by touchpoint</div><div class="s">Each bead is one moment, coloured by its economy. Click a bead, or drag the line to move through the day.</div></div>
+  </div>
+  <div class="tracks" id="tracks"></div>
+</section>
+
+<section class="opps" id="opps"><h3>⚡ <span id="oppCount"></span> frictions, turned into opportunities</h3><p>Where the day rubs, and a fix this family can actually reach: free schemes, small rupee amounts, people already in their lives. Click a card to see the moment.</p><div class="opgrid" id="opgrid"></div></section>
+<section class="legend" id="legend"></section>
+
+<div class="intro" id="intro" role="dialog" aria-label="Meet the family">
+  <div>
+    <p class="k">One Thursday in Malleshwaram</p>
+    <h2>Meet the family</h2>
+    <p class="k" style="margin-top:8px">Six people, three generations, one house on 15th Cross</p>
+    <div class="roster" id="roster"></div>
+  </div>
+  <div class="stage">
+    <div class="gen" id="iGen"></div>
+    <div class="spin" id="spin"><img id="iFront" alt=""><img class="back" id="iBack" alt=""></div>
+    <div class="ped"></div>
+    <div class="arrows"><button type="button" id="iPrev" aria-label="Previous person">←</button><button type="button" id="iNext" aria-label="Next person">→</button></div>
+  </div>
+  <div class="bio">
+    <h3 id="iName"></h3>
+    <div class="role" id="iRole"></div>
+    <p id="iBio"></p>
+    <div class="k" style="margin:0 0 6px">Their Thursday, by economy</div>
+    <div id="iStats"></div>
+    <div class="go"><button type="button" class="primary" id="iGo"></button><button type="button" id="iSkip">See everyone at once</button></div>
+  </div>
+</div>
+<div class="drawer" id="drawer" aria-hidden="true">
+  <button class="x" id="closeDrawer" type="button" aria-label="Close">×</button>
+  <h2 id="dTitle">Edit touchpoint</h2>
+  <p class="hint" id="dHint">Changes save to the shared version: everyone with the link sees them.</p>
+  <form id="form">
+    <div class="row2">
+      <div><label for="fWho">Person</label><select id="fWho"></select></div>
+      <div><label for="fTime">Time</label><input id="fTime" type="time" required></div>
+    </div>
+    <div class="row2">
+      <div><label for="fPlace">Place</label><select id="fPlace"></select></div>
+      <div><label for="fZone">Spot</label><select id="fZone"></select></div>
+    </div>
+    <label for="fPose">Pose</label><select id="fPose"></select>
+    <div class="row2">
+      <div><label for="fWith1">Also in the scene</label><select id="fWith1"></select></div>
+      <div><label for="fWith2">&nbsp;</label><select id="fWith2"></select></div>
+    </div>
+    <label for="fTitle">Title</label><input id="fTitle" maxlength="80" required>
+    <label for="fText">What happens</label><textarea id="fText" maxlength="600" required></textarea>
+    <label>Economies</label><div class="ecopick" id="fEco"></div>
+    <label for="fNote">Note (optional)</label><input id="fNote" maxlength="160" placeholder="e.g. Green intent, Brown materials.">
+    <div class="actions">
+      <button class="primary" type="submit" id="saveBtn">Save</button>
+      <button type="button" id="newBtn">+ New touchpoint</button>
+      <button type="button" class="danger" id="delBtn">Delete</button>
+    </div>
+    <div class="status" id="status" role="status"></div>
+  </form>
+</div>
+
+<script>
+const SEED = [{"id": "a01", "who": "ananya", "time": "07:15", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Reels and a thrift drop", "text": "Snoozes the alarm twice, scrolls reels and saves a thrift store's Navaratri drop before her feet touch the floor.", "eco": ["gold", "green"]}, {"id": "a02", "who": "ananya", "time": "07:20", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Tracker app and the medicine box", "text": "Day two of her period: logs it in her tracker app and takes a painkiller from the family medicine box.", "eco": ["white", "gold"]}, {"id": "a03", "who": "ananya", "time": "07:35", "place": "home", "zone": "upbath", "pose": "ananya_standing", "title": "Solar-warmed bath", "text": "The bath water upstairs is warm from the solar heater on the terrace.", "eco": ["green"]}, {"id": "a04", "who": "ananya", "time": "07:40", "place": "home", "zone": "kitchen", "pose": "ananya_walking", "title": "Steel bottle at the RO", "text": "Fills her steel bottle at the RO purifier, leaving the reject-water bucket for mopping.", "eco": ["green", "blue"], "note": "RO wastes water; reusing the reject water pulls it back toward circular."}, {"id": "a05", "who": "ananya", "time": "07:50", "place": "home", "zone": "kitchen", "pose": "ananya_standing", "with": ["paati_cooking"], "title": "Dosas on the LPG stove", "text": "Downstairs, Paati has dosas going on the LPG stove.", "eco": ["brown"]}, {"id": "a06", "who": "ananya", "time": "08:05", "place": "home", "zone": "dining", "pose": "ananya_phone", "with": ["thatha_call"], "title": "Thatha meets his brother on video", "text": "Between bites, she sets up a video call so Thatha can see his brother in Mysuru.", "eco": ["silver", "gold"]}, {"id": "a07", "who": "ananya", "time": "08:30", "place": "metro", "zone": "main", "pose": "ananya_walking", "title": "Walks to Sampige Road metro", "text": "Skips the bike-taxi app, walks to Sampige Road station and taps her metro card at the gate.", "eco": ["green", "gold"]}, {"id": "a08", "who": "ananya", "time": "09:15", "place": "college", "zone": "main", "pose": "ananya_phone", "title": "Attendance on an app", "text": "College starts with attendance marked on an app.", "eco": ["gold"]}, {"id": "a09", "who": "ananya", "time": "09:45", "place": "college", "zone": "main", "pose": "ananya_laptop", "title": "Screen-reader-friendly notes", "text": "In psychology, she shares her notes as screen-reader-friendly PDFs for a classmate with low vision.", "eco": ["purple"]}, {"id": "a10", "who": "ananya", "time": "10:45", "place": "college", "zone": "main", "pose": "ananya_laptop", "title": "Podcast on Malleshwaram's old markets", "text": "Journalism lab: editing a podcast episode about Malleshwaram's old markets, with Paati's voice in it.", "eco": ["orange", "silver"]}, {"id": "a11", "who": "ananya", "time": "11:30", "place": "canteen", "zone": "main", "pose": "ananya_standing", "with": ["chai_vendor"], "title": "Chai: no licence, but a UPI QR", "text": "At the gate she buys chai from a stall that has no licence but does have a UPI QR code.", "eco": ["grey", "gold"]}, {"id": "a12", "who": "ananya", "time": "12:00", "place": "college", "zone": "main", "pose": "ananya_standing", "title": "Volunteer listener", "text": "Signs up as a volunteer listener at the peer-support club.", "eco": ["white"]}, {"id": "a13", "who": "ananya", "time": "12:30", "place": "college", "zone": "main", "pose": "ananya_laptop", "title": "Outline with an AI tool", "text": "Drafts an assignment outline with an AI tool.", "eco": ["gold"]}, {"id": "a14", "who": "ananya", "time": "12:45", "place": "library", "zone": "main", "pose": "ananya_book", "title": "A second-hand Small Is Beautiful", "text": "Borrows a second-hand copy of Small Is Beautiful from the library.", "eco": ["green", "orange"]}, {"id": "a15", "who": "ananya", "time": "13:00", "place": "canteen", "zone": "main", "pose": "ananya_friends", "title": "Swiggy in plastic boxes", "text": "Splits a Swiggy order with friends that arrives in a stack of plastic boxes.", "eco": ["gold", "brown"], "friction": {"f": "Lunch with friends arrives as a stack of single-use plastic boxes.", "opp": ["green", "brown"], "sol": "Paati already packs two tiffins for Madhav. Add a steel box for Ananya twice a week, and take a steel box to the canteen counter for takeaway.", "who": "Paati, Ananya", "cost": "Saves money", "scale": "together", "after": ["gold", "green"]}}, {"id": "a16", "who": "ananya", "time": "13:30", "place": "college", "zone": "main", "pose": "ananya_laptop", "title": "Campus water audit", "text": "The afternoon group project is a water audit of the campus.", "eco": ["blue", "green"]}, {"id": "a17", "who": "ananya", "time": "14:15", "place": "college", "zone": "main", "pose": "ananya_laptop", "title": "Posters for a home baker", "text": "Finishes Instagram posters for a home baker, her freelance client, and gets paid by UPI with no invoice on either side.", "eco": ["orange", "grey", "gold"]}, {"id": "a18", "who": "ananya", "time": "15:00", "place": "metro", "zone": "main", "pose": "ananya_phone", "title": "A podcast on the metro home", "text": "Listens to a podcast on the metro home.", "eco": ["orange", "green"]}, {"id": "a19", "who": "ananya", "time": "15:30", "place": "street", "zone": "main", "pose": "ananya_standing", "title": "Kutch bandhani pop-up", "text": "Gets off near 8th Cross, where a pop-up of Kutch artisans is selling bandhani; buys a dupatta for tonight.", "eco": ["orange", "yellow"], "note": "Kutch is a desert craft economy: Yellow meets Orange."}, {"id": "a20", "who": "ananya", "time": "15:45", "place": "street", "zone": "main", "pose": "ananya_standing", "with": ["flower_seller"], "title": "Marigolds from the footpath", "text": "A footpath flower seller gives her marigold and mango leaves for Paati's golu after some bargaining.", "eco": ["grey"]}, {"id": "a21", "who": "ananya", "time": "16:00", "place": "phonefix", "zone": "main", "pose": "ananya_phone", "title": "Repair, not replace", "text": "Her cracked phone goes to the repair shop instead of being replaced.", "eco": ["green", "grey"]}, {"id": "a22", "who": "ananya", "time": "16:10", "place": "pharmacy", "zone": "main", "pose": "ananya_standing", "title": "Thatha's BP tablets", "text": "Picks up Thatha's BP tablets with his prescription.", "eco": ["white", "silver"]}, {"id": "a23", "who": "ananya", "time": "16:25", "place": "tank", "zone": "main", "pose": "ananya_walking", "title": "Sankey Tank walk", "text": "A short walk at Sankey Tank, where volunteers are clearing weeds.", "eco": ["blue"]}, {"id": "a24", "who": "ananya", "time": "16:40", "place": "tank", "zone": "main", "pose": "ananya_phone", "title": "BESCOM bill on the app", "text": "Pays the electricity bill on the BESCOM app for Amma.", "eco": ["gold", "brown"]}, {"id": "a25", "who": "ananya", "time": "16:50", "place": "gym", "zone": "main", "pose": "ananya_standing", "title": "Gym, tracked on a smartwatch", "text": "Squeezes in a gym session tracked on her smartwatch.", "eco": ["white", "gold"]}, {"id": "a26", "who": "ananya", "time": "17:45", "place": "home", "zone": "golu", "pose": "ananya_standing", "with": ["paati_golu"], "title": "The golu's last step", "text": "Back home, she helps Paati add the last step to the golu.", "eco": ["orange", "silver"]}, {"id": "a28", "who": "ananya", "time": "18:15", "place": "home", "zone": "golu", "pose": "ananya_evening", "title": "The golu reel", "text": "Wears the new bandhani and posts a reel of the golu, which gets more likes than anything she has posted this month.", "eco": ["orange", "gold"]}, {"id": "a29", "who": "ananya", "time": "18:40", "place": "street", "zone": "main", "pose": "ananya_evening", "with": ["paati_walking"], "title": "Golu-hopping with Paati", "text": "Goes golu-hopping with Paati, carrying the thamboolam in Paati's old-sari cloth bag.", "eco": ["orange", "silver", "green"]}, {"id": "a30", "who": "ananya", "time": "19:10", "place": "neighbour", "zone": "main", "pose": "ananya_evening", "with": ["neighbour_son"], "title": "Bringing the golu downstairs", "text": "The neighbour's son uses a wheelchair and can't reach the first-floor golu, so she brings the sundal and the photos down to him.", "eco": ["purple"], "friction": {"f": "The neighbour's son uses a wheelchair and can't reach the first-floor golu.", "opp": ["purple", "orange"], "sol": "Next Navaratri, set up the street's golu-hopping 'map' with one ground-floor golu, and video-call golu tours for anyone who can't climb. Ananya already brings the sundal downstairs.", "who": "Ananya, the neighbours", "cost": "Free", "scale": "together", "after": ["purple", "orange"]}}, {"id": "a31", "who": "ananya", "time": "19:30", "place": "neighbour", "zone": "main", "pose": "ananya_evening", "title": "Sundal in steel boxes", "text": "They collect sundal from every house in steel boxes.", "eco": ["green"]}, {"id": "a32", "who": "ananya", "time": "19:50", "place": "street", "zone": "main", "pose": "ananya_evening", "with": ["auto_driver"], "title": "Auto home, meter off", "text": "They take an auto back, paid in cash with the meter off.", "eco": ["grey", "brown"], "friction": {"f": "An auto ride home with the meter off, paid in cash: no fair price for her, no record for the driver.", "opp": ["grey", "gold"], "sol": "Use Namma Yatri, Bengaluru's driver-friendly auto app, or insist on the meter. The driver keeps more of the fare than on commission apps.", "who": "Ananya, Paati", "cost": "About the same fare", "src": [["Namma Yatri: zero-commission, driver-led", "https://citizenmatters.in/ride-hailing-apps-bengaluru-commuters-nano-travels-namma-yatri-rapido-quick-ride/"]], "scale": "alone", "after": ["gold", "brown"]}}, {"id": "a33", "who": "ananya", "time": "20:10", "place": "home", "zone": "door", "pose": "ananya_standing", "with": ["amma_site"], "title": "Amma's green building", "text": "Amma is back from site, full of a green-building project that still needs a lot of cement and steel.", "eco": ["green", "brown"], "note": "Green intent, Brown materials."}, {"id": "a34", "who": "ananya", "time": "20:30", "place": "home", "zone": "dining", "pose": "ananya_eat", "title": "Leftover rice, lemon rice", "text": "Dinner is for six, and the morning's leftover rice has become Paati's lemon rice.", "eco": ["green"]}, {"id": "a35", "who": "ananya", "time": "20:50", "place": "home", "zone": "terrace", "pose": "ananya_standing", "title": "Peels to the compost", "text": "Washes up and empties the vegetable peels into the terrace compost bin.", "eco": ["green"]}, {"id": "a36", "who": "ananya", "time": "21:10", "place": "home", "zone": "ananya", "pose": "ananya_laptop", "title": "College portal", "text": "Submits an assignment on the college portal.", "eco": ["gold"]}, {"id": "a37", "who": "ananya", "time": "21:30", "place": "home", "zone": "ananya", "pose": "ananya_laptop", "with": ["madhav_reading"], "title": "Algebra with Madhav", "text": "Helps Madhav with an algebra problem.", "eco": ["white"], "note": "Unpaid care inside the family, which no economy counts."}, {"id": "a38", "who": "ananya", "time": "21:50", "place": "home", "zone": "ananya", "pose": "ananya_laptop", "title": "Online counselling", "text": "Her fortnightly online counselling session through the college wellness platform.", "eco": ["white", "gold"]}, {"id": "a39", "who": "ananya", "time": "22:30", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Pricing Jaisalmer desert camps", "text": "She and her friends price desert camps for a Jaisalmer trip in winter break.", "eco": ["yellow"]}, {"id": "a40", "who": "ananya", "time": "22:45", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "The kurta she doesn't buy", "text": "Adds a kurta to her cart, thinks about the Schumacher she borrowed, and removes it.", "eco": ["gold", "green"], "note": "A Small Is Beautiful moment: choosing not to consume."}, {"id": "a41", "who": "ananya", "time": "23:00", "place": "home", "zone": "ananya", "pose": "ananya_laptop", "title": "Grid power and a K-drama", "text": "Phone, laptop and power bank charge on grid power while she watches one episode of a K-drama.", "eco": ["brown", "orange"], "friction": {"f": "Every phone, laptop and power bank in the house charges on grid power, which in Karnataka is still partly coal.", "opp": ["brown", "green"], "sol": "The terrace already heats water with solar. A 2 kW rooftop unit gets ₹60,000 under PM Surya Ghar (up to ₹78,000 for 3 kW), but terrace space is shared with the tank and heater, so 1 to 2 kW is realistic. Shift heavy charging to daytime.", "who": "Arvind applies; a registered vendor installs", "cost": "Central subsidy ₹30,000 per kW for the first 2 kW", "src": [["PM Surya Ghar subsidy slabs", "https://www.angelone.in/news/government-schemes/pm-surya-ghar-yojana-crosses-26-lakh-installations-how-to-get-up-to-78-000-subsidy-on-rooftop-solar"]], "scale": "together", "after": ["green", "orange"]}}, {"id": "a42", "who": "ananya", "time": "23:15", "place": "home", "zone": "ananya", "pose": "ananya_standing", "title": "Ayurvedic skincare", "text": "Her skincare comes from a small Ayurvedic brand she found on Instagram.", "eco": ["white", "gold"]}, {"id": "a43", "who": "ananya", "time": "23:30", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Bengaluru's water shortage", "text": "Reads news about Bengaluru's summer water shortage and feels uneasy.", "eco": ["blue"], "friction": {"f": "Bengaluru's summer water shortage, and a house that depends on Cauvery water and tankers.", "opp": ["blue", "green"], "sol": "Rooftop rainwater harvesting into the existing terrace tank, plus a recharge pit. In Bengaluru it is mandatory for 60×40 ft sites and above, and for new houses on 30×40 ft. Keep reusing RO reject water for plants and mopping.", "who": "Deepa designs it; a local RWH plumber builds it", "cost": "One-time cost, and avoids BWSSB penalties", "src": [["BWSSB: RWH mandatory for 60×40 and new 30×40 sites", "https://constructionworld.in/urban-infrastructure/wastewater-and-sewage-treatment/only-1-in-5-bengaluru-homes-adopt-rainwater-harvesting/52728"]], "scale": "together", "after": ["blue", "green"]}}, {"id": "a44", "who": "ananya", "time": "23:40", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Paati's goodnight", "text": "In the family WhatsApp group, Paati has posted her goodnight message; Ananya replies with a heart.", "eco": ["silver", "gold"]}, {"id": "a45", "who": "ananya", "time": "23:50", "place": "home", "zone": "ananya", "pose": "ananya_standing", "title": "Paper journal", "text": "Writes in her paper journal for ten minutes.", "eco": ["orange"]}, {"id": "a46", "who": "ananya", "time": "00:05", "place": "home", "zone": "ananya", "pose": "ananya_phone", "title": "Used textbook, resale app", "text": "Buys a used textbook for next semester on a resale app.", "eco": ["green", "gold"]}, {"id": "a47", "who": "ananya", "time": "00:30", "place": "home", "zone": "ananya", "pose": "ananya_sleeping", "title": "Rain sounds, ceiling fan", "text": "Sets her alarm, starts a rain-sounds sleep timer and falls asleep at 12:30 under the ceiling fan.", "eco": ["brown", "gold"]}, {"id": "m01", "who": "madhav", "time": "06:00", "place": "home", "zone": "madhav", "pose": "madhav_standing", "title": "Appa's old smartwatch", "text": "Madhav wakes at 6 to the buzz of Appa's old smartwatch.", "eco": ["gold", "green"]}, {"id": "m03", "who": "madhav", "time": "06:15", "place": "home", "zone": "terrace", "pose": "madhav_watering", "title": "RO reject water for the tulsi", "text": "Waters the tulsi and terrace plants with the RO reject water, one of his eco-club rules.", "eco": ["green", "blue"]}, {"id": "m05", "who": "madhav", "time": "06:35", "place": "home", "zone": "bath", "pose": "madhav_standing", "title": "Amma's bucket-bath rule", "text": "Amma's water rule means a bucket bath.", "eco": ["blue"]}, {"id": "m06", "who": "madhav", "time": "06:45", "place": "home", "zone": "kitchen", "pose": "madhav_standing", "with": ["paati_cooking"], "title": "Ragi malt and idlis", "text": "Paati has ragi malt and idlis ready from the LPG stove.", "eco": ["brown"]}, {"id": "m08", "who": "madhav", "time": "07:55", "place": "home", "zone": "kitchen", "pose": "madhav_running", "title": "Steel tiffin, cloth napkin", "text": "Packs a steel tiffin wrapped in a cloth napkin.", "eco": ["green"]}, {"id": "m09", "who": "madhav", "time": "08:15", "place": "road", "zone": "main", "pose": "amma_car", "title": "Brodha V in Amma's car", "text": "Amma drives him to school down Margosa Road. He plays Brodha V; Amma knows the Kannada hook, which surprises him. At the gate: a quick 'Bye Amma'.", "eco": ["brown", "orange"], "friction": {"f": "A seven-minute school run takes twenty minutes by car in Margosa Road traffic.", "opp": ["brown", "green"], "sol": "Madhav already owns a second-hand bicycle. He can cycle with a classmate on two days, and carpool with two neighbours' kids on the rest.", "who": "Deepa and two other parents", "cost": "Saves fuel", "scale": "alone", "after": ["green", "orange"]}}, {"id": "m10", "who": "madhav", "time": "08:40", "place": "school", "zone": "main", "pose": "madhav_standing", "title": "Dry and wet waste rule", "text": "At assembly Madhav announces the eco-club's new dry and wet waste rule.", "eco": ["green"]}, {"id": "m12", "who": "madhav", "time": "09:45", "place": "classroom", "zone": "main", "pose": "madhav_standing", "title": "Sand-and-charcoal water filter", "text": "In science they build a sand-and-charcoal water filter.", "eco": ["blue"]}, {"id": "m13", "who": "madhav", "time": "10:30", "place": "classroom", "zone": "main", "pose": "madhav_reading", "title": "Reading aloud for the group", "text": "In English, a classmate with low vision follows the chapter on a magnifier app and Madhav reads aloud for their group.", "eco": ["purple"]}, {"id": "m15", "who": "madhav", "time": "11:25", "place": "playground", "zone": "main", "pose": "madhav_knee", "title": "Scraped knee, school nurse", "text": "Scrapes his knee playing football and gets a band-aid from the school nurse.", "eco": ["white"]}, {"id": "m16", "who": "madhav", "time": "12:00", "place": "classroom", "zone": "main", "pose": "madhav_standing", "title": "A golu quiz in Scratch", "text": "Coding club is his favourite hour: he is building a golu quiz game in Scratch.", "eco": ["gold", "orange"]}, {"id": "m18", "who": "madhav", "time": "13:15", "place": "school", "zone": "main", "pose": "madhav_standing", "title": "Puliyogare for paneer", "text": "At lunch he trades Paati's puliyogare for a friend's paneer.", "eco": ["grey"], "note": "Barter: an economy no one measures."}, {"id": "m20", "who": "madhav", "time": "15:30", "place": "school", "zone": "main", "pose": "thatha_chetak", "title": "Home on the Chetak", "text": "Thatha picks him up on the 1989 Bajaj Chetak. It starts on the second kick. Madhav loves it: no one else at the gate has a grandfather on a scooter older than their parents.", "eco": ["brown", "silver", "green"], "note": "Repair, not replace: a 35-year-old scooter still running."}, {"id": "m21", "who": "madhav", "time": "15:40", "place": "home", "zone": "kitchen", "pose": "madhav_standing", "title": "Murukku and the lunch Paati kept", "text": "Kamala has murukku and buttermilk ready. He eats three murukku before saying hello.", "eco": ["silver", "green"]}, {"id": "m23", "who": "madhav", "time": "16:50", "place": "home", "zone": "madhav", "pose": "madhav_gaming", "title": "Minecraft, twenty minutes", "text": "His allowed twenty minutes of Minecraft with friends goes by too fast.", "eco": ["gold", "orange"]}, {"id": "m25", "who": "madhav", "time": "16:20", "place": "home", "zone": "tpbed", "pose": "madhav_reading", "title": "The tiny print on the strip", "text": "Back home he reads the tiny print on Thatha's medicine strip for him.", "eco": ["silver", "white"]}, {"id": "m27", "who": "madhav", "time": "17:15", "place": "neighbour", "zone": "main", "pose": "madhav_dance", "title": "Bharatanatyam, fees in cash", "text": "Bharatanatyam class in his teacher's living room, beside her small golu. The fees are paid in cash.", "eco": ["orange", "grey"]}, {"id": "m28", "who": "madhav", "time": "18:00", "place": "street", "zone": "main", "pose": "madhav_cycling", "title": "Second-hand bicycle", "text": "Cycles home on a second-hand bicycle.", "eco": ["green"]}, {"id": "m29", "who": "madhav", "time": "18:10", "place": "home", "zone": "madhav", "pose": "madhav_veshti", "title": "Thatha's old veshti", "text": "Changes into a kurta and Thatha's old veshti.", "eco": ["green", "silver"]}, {"id": "m30", "who": "madhav", "time": "18:20", "place": "home", "zone": "golu", "pose": "madhav_veshti", "title": "A keerthanam at the golu", "text": "When visitors arrive he sings a keerthanam in front of the golu.", "eco": ["orange"]}, {"id": "m32", "who": "madhav", "time": "18:50", "place": "neighbour", "zone": "main", "pose": "madhav_veshti", "with": ["paati_walking"], "title": "Golu-hopping", "text": "Goes golu-hopping with Paati and Ananya.", "eco": ["orange", "silver"]}, {"id": "m33", "who": "madhav", "time": "19:05", "place": "neighbour", "zone": "main", "pose": "madhav_headphones", "with": ["neighbour_son"], "title": "Headphones for a loud bhajan", "text": "During a loud bhajan, he lends his noise-cancelling headphones to a neighbour's autistic son.", "eco": ["purple"]}, {"id": "m35", "who": "madhav", "time": "21:30", "place": "home", "zone": "madhav", "pose": "madhav_reading", "title": "Birds of Sankey Tank", "text": "Science homework before bed: a project on the birds of Sankey Tank.", "eco": ["blue"]}, {"id": "m37", "who": "madhav", "time": "20:00", "place": "home", "zone": "golu", "pose": "madhav_filming", "title": "Showing the golu to Chennai", "text": "Video-calls Appa's mother in Chennai to show her the golu.", "eco": ["silver", "gold"]}, {"id": "m38", "who": "madhav", "time": "20:30", "place": "home", "zone": "dining", "pose": "madhav_eat", "title": "Rasam rice", "text": "Dinner is rasam rice cooked on LPG.", "eco": ["brown"]}, {"id": "m39", "who": "madhav", "time": "20:40", "place": "home", "zone": "kitchen", "pose": "madhav_sorting", "title": "Colour-coded bins", "text": "Sorts the kitchen waste into the colour-coded bins.", "eco": ["green"]}, {"id": "m40", "who": "madhav", "time": "21:00", "place": "home", "zone": "lounge", "pose": "madhav_gaming", "title": "FIFA with Ananya", "text": "He and Ananya claim the PlayStation Appa bought \"for the family\". One FIFA match becomes three; Madhav plays leaning forward and cares a great deal.", "eco": ["gold", "orange", "brown"], "note": "Gaming: a creative industry running on grid power."}, {"id": "m42", "who": "madhav", "time": "21:45", "place": "home", "zone": "tpbed", "pose": "madhav_standing", "title": "Thatha's eye drops", "text": "He puts Thatha's eye drops in for him downstairs.", "eco": ["silver", "white"]}, {"id": "m43", "who": "madhav", "time": "21:50", "place": "home", "zone": "madhav", "pose": "madhav_reading", "title": "Ruskin Bond from the library", "text": "Reads a Ruskin Bond book from the school library.", "eco": ["orange", "green"]}, {"id": "m45", "who": "madhav", "time": "22:00", "place": "home", "zone": "madhav", "pose": "madhav_sleep", "title": "Lights out", "text": "LED lights off at 10. He is asleep before Ananya has even started her assignment.", "eco": ["green"]}, {"id": "a48", "who": "ananya", "time": "21:00", "place": "home", "zone": "lounge", "pose": "ananya_gaming", "title": "FIFA with Madhav", "text": "One FIFA match with Madhav on the family PlayStation turns into three. She plays cross-legged and pretends not to care.", "eco": ["gold", "orange", "brown"]}, {"id": "p01", "who": "appa", "time": "05:15", "place": "home", "zone": "adbed", "pose": "appa_standing", "title": "Eleven Slack messages, unopened", "text": "His phone vibrates at 5:15. He sees eleven unread messages from the US team and opens none of them: a rule since his cardiologist called his BP 'a number for a 60-year-old'.", "eco": ["gold", "white"]}, {"id": "p02", "who": "appa", "time": "05:30", "place": "tank", "zone": "main", "pose": "appa_walk", "title": "Walking with Thatha", "text": "At Sankey Tank he joins his father-in-law and two retired teachers debating, in Kannada, whether the metro ruined or saved Malleshwaram.", "eco": ["blue", "silver", "white"], "with": ["thatha_friends"]}, {"id": "p03", "who": "appa", "time": "05:50", "place": "tank", "zone": "main", "pose": "appa_walk", "title": "Podcast, then Ilaiyaraaja", "text": "Second round alone: a leadership podcast, then old Ilaiyaraaja songs while he drafts a performance review in his head.", "eco": ["orange", "gold"]}, {"id": "p04", "who": "appa", "time": "06:40", "place": "street", "zone": "main", "pose": "appa_standing", "title": "Coriander, curry leaves, bananas", "text": "Stops at the 8th Cross vegetable vendor for what Kamala asked for in a voice note.", "eco": ["grey"], "with": ["pushcart"]}, {"id": "p05", "who": "appa", "time": "06:50", "place": "home", "zone": "door", "pose": "appa_walk", "title": "Kesari at the door", "text": "Back from the walk, Kamala meets him at the door with rava kesari: 'Idhu unakku. Don't tell Deepa.'", "eco": ["silver", "green"], "with": ["paati_walking"]}, {"id": "p06", "who": "appa", "time": "07:15", "place": "home", "zone": "study", "pose": "appa_laptop", "title": "1:1 with California", "text": "From the small study, a call with an engineer in California, where it's still Wednesday evening.", "eco": ["gold"]}, {"id": "p07", "who": "appa", "time": "07:45", "place": "home", "zone": "dining", "pose": "appa_dinner", "title": "Breakfast and a buzzing watch", "text": "Idli from Sunday's batter and the leftover kesari. His watch buzzes; Deepa notices him noticing it.", "eco": ["gold"], "with": ["madhav_dinner"]}, {"id": "p08", "who": "appa", "time": "08:30", "place": "road", "zone": "main", "pose": "appa_cab", "title": "Cab over the Hebbal flyover", "text": "A cab to Manyata. He clears his inbox and approves two merges on the way.", "eco": ["brown", "gold"]}, {"id": "p09", "who": "appa", "time": "08:45", "place": "road", "zone": "main", "pose": "appa_cab", "title": "Amma's cataract surgery", "text": "On his siblings' WhatsApp group, he debates his mother's cataract surgery in Chennai. He sends money and opinions and feels guilty about the distance.", "eco": ["silver", "white", "gold"], "note": "Care at a distance, paid for digitally."}, {"id": "p10", "who": "appa", "time": "09:30", "place": "office", "zone": "main", "pose": "appa_laptop", "title": "Standup, cameras off", "text": "Standup with fourteen engineers; half are remote with cameras off.", "eco": ["gold"]}, {"id": "p11", "who": "appa", "time": "10:30", "place": "office", "zone": "main", "pose": "appa_standing", "title": "Questions instead of no", "text": "A 26-year-old proposes a rewrite. Arvind asks questions instead of saying no.", "eco": ["gold"]}, {"id": "p12", "who": "appa", "time": "11:30", "place": "office", "zone": "main", "pose": "appa_laptop", "title": "Adapting to AI tools", "text": "A hard performance conversation with a 41-year-old struggling with AI coding tools. It helps that Arvind admits he finds it hard too.", "eco": ["gold", "white"]}, {"id": "p13", "who": "appa", "time": "12:30", "place": "office", "zone": "main", "pose": "appa_standing", "title": "A whole bottle of water", "text": "He realises he hasn't had water since breakfast and drinks a whole bottle at once.", "eco": ["white", "blue"]}, {"id": "p14", "who": "appa", "time": "13:00", "place": "office", "zone": "main", "pose": "appa_standing", "title": "Real estate and a coffee farm", "text": "Cafeteria lunch: college admissions, real estate prices, staying relevant, and a colleague's dream of a coffee farm near Chikmagalur.", "eco": ["brown", "green"], "note": "The two exits everyone talks about: property, or the land."}, {"id": "p15", "who": "appa", "time": "16:00", "place": "office", "zone": "main", "pose": "appa_standing", "title": "'Bombe*'", "text": "On mute in a US call, he reads the family group: Kamala's golu photo, and Ramachandra's one-word correction.", "eco": ["gold", "silver", "orange"]}, {"id": "p16", "who": "appa", "time": "17:45", "place": "road", "zone": "main", "pose": "appa_cab", "title": "Eighty minutes, and a call to Chennai", "text": "The cab home takes eighty minutes. He calls his mother; it is the best part of his day.", "eco": ["brown", "silver"]}, {"id": "p17", "who": "appa", "time": "19:30", "place": "home", "zone": "golu", "pose": "appa_standing", "title": "The whole family at the golu", "text": "Kamala sings in Tamil, Ramachandra follows with Purandara Dasa in Kannada. Half an hour with everyone in one room.", "eco": ["orange", "silver"], "with": ["paati_golu"]}, {"id": "p18", "who": "appa", "time": "20:30", "place": "home", "zone": "dining", "pose": "appa_eat", "title": "Phones face down", "text": "Dinner for six with Kamala's sundal and bisi bele bath. 'Finish class 10 first.'", "eco": ["silver", "green"]}, {"id": "p19", "who": "appa", "time": "20:50", "place": "home", "zone": "kitchen", "pose": "appa_dishes", "title": "The dishes", "text": "He does the dishes: non-negotiable since 2004.", "eco": ["white"], "note": "Unpaid care, shared."}, {"id": "p20", "who": "appa", "time": "21:05", "place": "home", "zone": "lounge", "pose": "appa_standing", "title": "Tactical advice nobody asked for", "text": "He watches the kids' FIFA from the kitchen doorway, wet plate in hand, and coaches anyway.", "eco": ["gold", "orange"], "with": ["ananya_madhav_gaming"]}, {"id": "p21", "who": "appa", "time": "21:30", "place": "home", "zone": "study", "pose": "appa_laptop", "title": "The call he said he wouldn't take", "text": "One more US call. Afterwards: 'Let's make it work.' He feels lighter.", "eco": ["gold"], "friction": {"f": "The 9:30 PM US call he promised himself he wouldn't take. His BP is already 'a number for a 60-year-old'.", "opp": ["white", "gold"], "sol": "Agree a hard stop at 9 PM with his team, rotate the late slot among managers, and send async video updates for status calls.", "who": "Arvind and his team", "cost": "Free", "scale": "together", "after": ["gold", "white"]}}, {"id": "p22", "who": "appa", "time": "22:30", "place": "home", "zone": "balcony", "pose": "appa_tea", "title": "Chamomile on the balcony", "text": "Tea neither of them likes, under the neem: his mother's surgery, her father's report, grab rails, Hampi.", "eco": ["silver", "white"], "with": ["amma_tea"]}, {"id": "d01", "who": "amma", "time": "05:20", "place": "home", "zone": "adbed", "pose": "amma_dinner", "title": "Saving a red oxide floor", "text": "Awake before getting up, she drafts arguments to save a 1960s red oxide floor in Jayanagar.", "eco": ["orange"]}, {"id": "d02", "who": "amma", "time": "05:45", "place": "home", "zone": "terrace", "pose": "amma_yoga", "title": "Yoga, and the glass tower", "text": "Twenty minutes of YouTube yoga on the terrace, facing the glass block that replaced a bungalow she fought to save.", "eco": ["white", "gold", "brown"]}, {"id": "d03", "who": "amma", "time": "06:30", "place": "home", "zone": "kitchen", "pose": "amma_coffee", "title": "The Kumbakonam filter", "text": "Filter coffee from the brass filter Kamala brought from Kumbakonam as part of her wedding things.", "eco": ["orange", "silver"]}, {"id": "d04", "who": "amma", "time": "06:35", "place": "home", "zone": "kitchen", "pose": "amma_phone", "title": "A 90-second voice note", "text": "Kamala's Tamil voice note, sent from one floor below: lemon rice for Madhav. There will be two lunches again.", "eco": ["silver", "gold"]}, {"id": "d05", "who": "amma", "time": "07:00", "place": "home", "zone": "madhav", "pose": "amma_dinner", "title": "The tablet negotiation", "text": "Madhav is under the blanket watching a Minecraft streamer. She takes the tablet; they negotiate.", "eco": ["gold"], "with": ["madhav_standing"]}, {"id": "d06", "who": "amma", "time": "08:15", "place": "road", "zone": "main", "pose": "amma_car", "title": "Seven minutes that take twenty", "text": "She drives Madhav to school in the Creta. Brodha V on the speaker; she knows the Kannada hook, which surprises him. A quick 'Bye Amma' at the gate.", "eco": ["brown", "orange"]}, {"id": "d07", "who": "amma", "time": "09:15", "place": "studio", "zone": "main", "pose": "amma_phone", "title": "An AI walkthrough", "text": "A junior architect's AI rendering looks impressive; the staircase doesn't meet code.", "eco": ["gold", "orange"]}, {"id": "d08", "who": "amma", "time": "10:00", "place": "site", "zone": "main", "pose": "amma_site2", "title": "The father touches the floor", "text": "At the Jayanagar site she argues for the red oxide floor. The client's father bends and touches it with his palm.", "eco": ["orange", "green", "silver"], "note": "Restoration over replacement.", "friction": {"f": "Green intent, Brown materials: her 'green' projects still need lots of cement and steel, and clients want to rip out old floors.", "opp": ["green", "orange"], "sol": "Make reuse the default: keep red oxide floors, salvage timber and Mangalore tiles, and specify fly-ash bricks. Then show clients the cost and carbon saved.", "who": "Deepa's studio", "cost": "Often cheaper than new", "scale": "alone", "after": ["green", "orange", "silver"]}}, {"id": "d09", "who": "amma", "time": "12:15", "place": "studio", "zone": "main", "pose": "amma_phone", "title": "Deepa's language selector", "text": "Delayed steel: firm in Kannada with the contractor, Tamil with her Hosur site supervisor.", "eco": ["brown"]}, {"id": "d10", "who": "amma", "time": "13:00", "place": "studio", "zone": "main", "pose": "amma_phone", "title": "Under the jackfruit tree", "text": "Ten minutes of Instagram at lunch, and Ananya's meme reel. She replies '😑'.", "eco": ["gold", "orange"]}, {"id": "d11", "who": "amma", "time": "14:30", "place": "studio", "zone": "main", "pose": "amma_drawing", "title": "Red pen, GST", "text": "Marks up printed drawings in red pen; forty minutes of GST filings with Latha.", "eco": ["orange"]}, {"id": "d12", "who": "amma", "time": "16:00", "place": "studio", "zone": "main", "pose": "amma_phone", "title": "Old age, without looking old", "text": "A Dubai family's Coorg retirement home. She adds a ground-floor bedroom that can be adapted later.", "eco": ["silver", "purple", "orange"]}, {"id": "d13", "who": "amma", "time": "16:45", "place": "studio", "zone": "main", "pose": "amma_phone", "title": "The TV remote", "text": "Her father calls: he can't find the remote. It's near the golu.", "eco": ["silver"]}, {"id": "d14", "who": "amma", "time": "18:15", "place": "home", "zone": "golu", "pose": "amma_dinner", "title": "Coffee in the golu room", "text": "Kamala reports on the neighbours' sundal in Tamil. Her father mentions his blood test in Kannada, casually, so she knows he's worried.", "eco": ["silver", "white"], "with": ["paati_golu"]}, {"id": "d15", "who": "amma", "time": "18:40", "place": "home", "zone": "bath", "pose": "amma_site", "title": "Grab rails, fifth time", "text": "Deepa says the bathroom floor is slippery and they need grab rails. Ramachandra: the house has managed sixty-six years without them. Kamala, without looking up: 'Get them.'", "eco": ["silver", "purple", "white"], "friction": {"f": "The ground-floor bathroom gets slippery after every bath. Thatha (71) and Paati (68) use it daily, and Thatha refuses grab rails.", "opp": ["silver", "purple"], "sol": "Fit two steel grab rails and an anti-skid mat, and pitch it to Thatha as 'what Deepa designs for her clients'. Deepa can design it herself and use it as a prototype for the Coorg retirement home.", "who": "Local hardware fabricator, Deepa", "cost": "A few thousand rupees, one afternoon", "scale": "together", "after": ["silver", "purple", "white"]}}, {"id": "d16", "who": "amma", "time": "19:30", "place": "home", "zone": "golu", "pose": "amma_dinner", "title": "A blouse piece for her own daughter", "text": "The aarti, the songs, and thamboolam: the same blouse piece Kamala gives every visiting woman.", "eco": ["orange", "silver"], "with": ["paati_golu"]}, {"id": "d17", "who": "amma", "time": "20:30", "place": "home", "zone": "dining", "pose": "amma_eat", "title": "The look across the table", "text": "Dinner, phones face down. Madhav wants to be a gaming content creator.", "eco": ["silver", "green"]}, {"id": "d18", "who": "amma", "time": "21:30", "place": "home", "zone": "madhav", "pose": "amma_dinner", "title": "Listening, not advising", "text": "Madhav shows her three reels and a group-chat drama. She listens and doesn't advise.", "eco": ["gold", "white"]}, {"id": "d19", "who": "amma", "time": "21:50", "place": "home", "zone": "adbed", "pose": "amma_drawing", "title": "A sketch and a blood report", "text": "Sketches the red oxide floor and sends a photo to the client; forwards her father's report to the doctor.", "eco": ["orange", "white", "silver"]}, {"id": "d20", "who": "amma", "time": "22:30", "place": "home", "zone": "balcony", "pose": "amma_tea", "title": "Hampi, postponed four times", "text": "Chamomile tea on the balcony, talking in fragments.", "eco": ["silver", "white"], "with": ["appa_tea"]}, {"id": "d21", "who": "amma", "time": "22:55", "place": "home", "zone": "balcony", "pose": "amma_phone", "title": "Obbattu tomorrow", "text": "Kamala's last voice note, from one floor down: obbattu tomorrow. 'Your Appa asked for it.'", "eco": ["silver", "gold"]}, {"id": "t01", "who": "thatha", "time": "07:00", "place": "home", "zone": "verandah", "pose": "thatha_newspaper", "title": "Prajavani and the Sudoku", "text": "The verandah, the cane chair, Prajavani front to back. He saves the Sudoku for last because it's 'too easy', and does it in pencil so he can rub out mistakes no one will ever see.", "eco": ["orange", "silver"]}, {"id": "t02", "who": "thatha", "time": "05:30", "place": "tank", "zone": "main", "pose": "thatha_friends", "title": "The inner track", "text": "Sankey Tank with Srinivasamurthy (physics) and Gopal (Kannada). Is the metro ruining or saving Malleshwaram? To Arvind: 'You walk too fast. That's why you have pressure.' He doesn't mention his own blood report.", "eco": ["blue", "silver", "white"], "with": ["appa_walk"]}, {"id": "t03", "who": "thatha", "time": "06:50", "place": "home", "zone": "gate", "pose": "thatha_walk", "title": "Home with the vegetables", "text": "He walks home from Sankey Tank with Arvind, carrying the coriander, curry leaves and bananas.", "eco": ["silver"], "with": ["appa_walk"]}, {"id": "t04", "who": "thatha", "time": "08:05", "place": "home", "zone": "dining", "pose": "thatha_call", "title": "His brother in Mysuru", "text": "Ananya sets up a video call so he can see his brother.", "eco": ["silver", "gold"], "with": ["ananya_phone"]}, {"id": "t05", "who": "thatha", "time": "15:30", "place": "school", "zone": "main", "pose": "thatha_chetak", "title": "The Bajaj Chetak", "text": "He picks Madhav up on the old Chetak the family has begged him to sell for a decade.", "eco": ["brown", "silver"]}, {"id": "t06", "who": "thatha", "time": "15:50", "place": "home", "zone": "dining", "pose": "thatha_geometry", "title": "Circle theorems on a napkin", "text": "Geometry at the dining table with a ballpoint pen and a paper napkin. He is more animated than he's been all week.", "eco": ["silver", "white"], "note": "A retired teacher, still teaching."}, {"id": "t07", "who": "thatha", "time": "16:55", "place": "home", "zone": "madhav", "pose": "thatha_call", "title": "How are the blocks calculated?", "text": "He watches Madhav's Minecraft over his shoulder and asks how the blocks are 'calculated'.", "eco": ["gold", "silver"], "with": ["madhav_gaming"]}, {"id": "t08", "who": "thatha", "time": "16:45", "place": "home", "zone": "golu", "pose": "thatha_phone2", "title": "Where's the remote?", "text": "He calls Deepa: he can't find the TV remote. It's near the golu.", "eco": ["silver"]}, {"id": "t09", "who": "thatha", "time": "18:15", "place": "home", "zone": "golu", "pose": "thatha_call", "title": "The blood test, mentioned casually", "text": "From his chair he mentions it in Kannada, as if it were the weather: 'Sugar is a little up. Cholesterol also. Nothing serious.' Kamala puts down her tumbler. Deepa photographs the report.", "eco": ["white", "silver"], "with": ["amma_dinner"]}, {"id": "t10", "who": "thatha", "time": "19:30", "place": "home", "zone": "golu", "pose": "thatha_sing2", "title": "Purandara Dasa, and an API", "text": "He follows Kamala's song with Purandara Dasa in Kannada, then tells Ananya her generation can't do mental arithmetic. She asks him what an API is.", "eco": ["orange", "silver", "gold"]}, {"id": "t11", "who": "thatha", "time": "21:30", "place": "home", "zone": "tpbed", "pose": "thatha_call", "title": "Eye drops", "text": "Madhav puts his eye drops in for him.", "eco": ["silver", "white"], "with": ["madhav_standing"]}, {"id": "k01", "who": "paati", "time": "06:00", "place": "home", "zone": "kitchen", "pose": "paati_cooking", "title": "Lemon rice, a second tiffin", "text": "Last week Madhav came home hungry and called the canteen samosa 'mid'. So Kamala turns yesterday's leftover rice into lemon rice for a second tiffin, though Deepa has already packed one. Two lunches are better than one.", "eco": ["green", "silver"]}, {"id": "k02", "who": "paati", "time": "06:30", "place": "home", "zone": "kitchen", "pose": "paati_voice", "title": "A 90-second voice note", "text": "A 90-second Tamil voice note to Deepa, sent from downstairs. The actual message is in the last ten seconds.", "eco": ["silver", "gold"]}, {"id": "k03", "who": "paati", "time": "06:50", "place": "home", "zone": "door", "pose": "paati_tiffin", "title": "Idhu unakku", "text": "She meets Arvind at the door with rava kesari, and a steel tiffin wrapped in a cloth napkin for Madhav. She speaks to Arvind only in Tamil.", "eco": ["silver", "green"], "with": ["appa_standing"]}, {"id": "k04", "who": "paati", "time": "07:50", "place": "home", "zone": "kitchen", "pose": "paati_cooking", "title": "Dosas on the LPG stove", "text": "Dosas for Ananya on the LPG stove.", "eco": ["brown"], "with": ["ananya_standing"]}, {"id": "k05", "who": "paati", "time": "15:40", "place": "home", "zone": "kitchen", "pose": "paati_cooking", "title": "Murukku and buttermilk", "text": "Ready for Madhav when the Chetak pulls in.", "eco": ["silver"]}, {"id": "k06", "who": "paati", "time": "14:00", "place": "home", "zone": "golu", "pose": "paati_golu", "title": "'All of you come, no excuses'", "text": "She posts a photo of the doll steps to the family group with six flower emojis. Ramachandra replies from the next room: 'Bombe*'. She replies: '🙄'.", "eco": ["gold", "orange", "silver"]}, {"id": "k07", "who": "paati", "time": "17:00", "place": "home", "zone": "dining", "pose": "paati_tutor", "title": "Three neighbourhood children", "text": "Her three tuition children: two sisters from 14th Cross and a boy who 'has no reading habit'. She won't charge. They read aloud from an English newspaper and each gets sundal, because it's Navaratri.", "eco": ["silver", "white", "orange"], "note": "Unpaid work, paid back in vegetables, sweets and favours.", "with": ["tuition_kids"], "friction": {"f": "Kamala tutors three children for free, paid back in vegetables and favours. Her teaching is invisible and unrecognised.", "opp": ["silver", "orange", "white"], "sol": "Turn it into a weekly 'Paati's reading circle' at the neighbourhood library or a temple hall. It stays free, but becomes visible: other retired teachers can join, and Ananya can record the read-alouds as a podcast.", "who": "Kamala, Ananya, a local library", "cost": "Free", "scale": "together", "after": ["silver", "orange", "white"]}}, {"id": "k08", "who": "paati", "time": "17:45", "place": "home", "zone": "golu", "pose": "paati_golu", "title": "The last step of the golu", "text": "Ananya helps her add the last step.", "eco": ["orange", "silver"], "with": ["ananya_standing"]}, {"id": "k09", "who": "paati", "time": "18:15", "place": "home", "zone": "golu", "pose": "paati_golu", "title": "Who brought which sundal", "text": "Coffee with Deepa in the golu room, reporting in Tamil on which neighbours visited.", "eco": ["silver", "orange"], "with": ["amma_dinner"]}, {"id": "k10", "who": "paati", "time": "18:40", "place": "neighbour", "zone": "main", "pose": "paati_thamboolam", "title": "Golu-hopping", "text": "Visiting golus with Ananya, the thamboolam in her old-sari cloth bag.", "eco": ["orange", "silver", "green"], "with": ["ananya_evening"]}, {"id": "k11", "who": "paati", "time": "19:30", "place": "home", "zone": "golu", "pose": "paati_aarti", "title": "Aarti, and a retake", "text": "The aarti and a Tamil devotional song. She asks Madhav for a retake of his video: her sari pleats weren't right.", "eco": ["orange", "gold", "silver"]}, {"id": "k12", "who": "paati", "time": "19:50", "place": "home", "zone": "golu", "pose": "paati_thamboolam", "title": "Thamboolam and steel boxes", "text": "Betel leaves, coconut, a blouse piece for Deepa; then steel boxes of sundal and bisi bele bath for everyone.", "eco": ["orange", "green"], "with": ["amma_dinner"]}, {"id": "k13", "who": "paati", "time": "22:55", "place": "home", "zone": "kitchen", "pose": "paati_voice", "title": "Obbattu tomorrow", "text": "Her last voice note of the day, sent from downstairs: 'Wake up early tomorrow, I'm making obbattu. Your Appa asked for it.'", "eco": ["silver", "gold"]}, {"id": "m46", "who": "madhav", "time": "19:35", "place": "home", "zone": "golu", "pose": "madhav_filming", "title": "Filming the aarti", "text": "He films Paati's aarti for his Instagram story. She asks to see it, and asks for a retake: her sari pleats weren't right.", "eco": ["gold", "orange"]}, {"id": "a49", "who": "ananya", "time": "17:10", "place": "cafe", "zone": "main", "pose": "ananya_laptop", "title": "Hackathon at a Sampige Road café", "text": "Works on a hackathon project with two classmates. Texts the family: 'home by 8, eating outside maybe.' Five minutes later: 'actually saving money, will eat home.'", "eco": ["gold", "orange"]}, {"id": "k00", "who": "paati", "time": "05:00", "place": "home", "zone": "door", "pose": "paati_kolam", "title": "Kolam at dawn", "text": "She draws the rice-flour kolam at the door. Ants eat it by noon, and that, she tells the grandchildren, is the whole point.", "eco": ["orange", "green"]}, {"id": "t12", "who": "thatha", "time": "20:30", "place": "home", "zone": "dining", "pose": "thatha_dinner", "title": "Dinner for six", "text": "All six at the long teak table. He tells Ananya her generation can't do mental arithmetic, again.", "eco": ["silver", "green"]}, {"id": "k14", "who": "paati", "time": "20:30", "place": "home", "zone": "dining", "pose": "paati_dinner", "title": "Dinner for six", "text": "Lemon rice from the morning's leftovers, rasam, and her sundal. Phones face down, because Deepa says so.", "eco": ["silver", "green"]}, {"id": "k16", "who": "paati", "time": "04:45", "place": "home", "zone": "bath", "pose": "paati_voice", "title": "First bucket, slow geyser", "text": "Up before the alarm she never sets. She bathes first: the geyser is slow and the water heats properly only after the first bucket.", "eco": ["brown", "blue"]}, {"id": "k17", "who": "paati", "time": "04:55", "place": "home", "zone": "golu", "pose": "paati_aarti", "title": "The lamp, and Iron Man", "text": "She lights the lamp at the golu, checks that no doll fell in the night, and straightens the plastic Iron Man, which leans every day.", "eco": ["orange"]}, {"id": "t14", "who": "thatha", "time": "05:00", "place": "home", "zone": "tpbed", "pose": "thatha_walk", "title": "The pill box he resents", "text": "His BP tablet from the weekly pill box Deepa bought him. He resents the box and has never missed a dose since.", "eco": ["white", "silver"]}, {"id": "k18", "who": "paati", "time": "05:10", "place": "home", "zone": "door", "pose": "paati_tiffin", "title": "First coffee, at the door", "text": "Filter coffee in a steel tumbler and davara, from the brass filter she brought from Kumbakonam, handed to him at the door before his walk.", "eco": ["orange", "silver"], "with": ["thatha_walk"]}, {"id": "t15", "who": "thatha", "time": "07:30", "place": "lab", "zone": "main", "pose": "thatha_walk", "title": "The blood report, paid in cash", "text": "He walks to the diagnostic lab on Sampige Road and pays in cash. HbA1c up, cholesterol up. He folds the report behind the pen in his pocket: it can wait till evening.", "eco": ["white", "silver", "grey"], "friction": {"f": "His HbA1c and cholesterol are up, the report is paid for in cash, and he hides it in his pocket until evening.", "opp": ["white", "silver"], "sol": "Register Thatha for the Ayushman Vay Vandana card: free hospital cover of up to ₹5 lakh a year for everyone 70+, with no income test. Turn 'walk 2 rounds' into a standing deal with Srinivasamurthy and Gopal.", "who": "Ananya registers him on the Ayushman app with Aadhaar", "cost": "Free", "src": [["Ayushman Vay Vandana: ₹5 lakh/yr for all 70+", "https://www.icicilombard.com/health-insurance/ayushman-bharat-card/blogs/ayushman-bharat-vaya-vandana-card-guide"]], "scale": "alone", "after": ["white", "silver"]}}, {"id": "k19", "who": "paati", "time": "07:30", "place": "home", "zone": "kitchen", "pose": "paati_thamboolam", "title": "Lakshmamma, nineteen years", "text": "Lakshmamma, who has helped in the house for nineteen years, sweeps and mops. They talk in Kannada about her son's delivery job. Kamala gives her sundal and the Navaratri envelope.", "eco": ["grey", "white"], "note": "Paid care work, informal and untracked.", "with": ["lakshmamma"], "friction": {"f": "Lakshmamma has worked here for nineteen years with no social security. Her pay and the Navaratri envelope are all informal.", "opp": ["grey", "white"], "sol": "If she is under 60, help her register on e-Shram. It's free with Aadhaar and links her to insurance and pension schemes. Agree a written paid-leave and raise arrangement.", "who": "Ananya helps on her phone or at a CSC", "cost": "Free", "src": [["e-Shram registration is free (PIB, Aug 2026)", "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2026/aug/doc_9692_20260825_14270901.pdf"], ["Eligibility: ages 16–59", "https://www.bajajfinservmarkets.in/discover/e-shram-card"]], "scale": "together", "after": ["white", "gold"]}}, {"id": "k20", "who": "paati", "time": "08:30", "place": "home", "zone": "tpbed", "pose": "paati_voice", "title": "Two golus, one video call", "text": "Forty minutes on the tablet Ananya set up, with her sister in Kumbakonam. Kamala's golu has more steps; her sister's has older dolls. They are even.", "eco": ["silver", "gold", "orange"]}, {"id": "t16", "who": "thatha", "time": "09:30", "place": "street", "zone": "main", "pose": "thatha_chetak_solo", "title": "Thirty-five years vs seven", "text": "The Chetak goes to Basavaraj on 9th Cross, who has kept it alive since 1996. He pitches an electric scooter. 'How long will the battery last?' Six or seven years. 'This one has lasted thirty-five.'", "eco": ["brown", "green", "grey"], "note": "Petrol and repair vs a new battery: which is greener?", "with": ["mechanic"], "friction": {"f": "Spares for the 1989 Chetak are getting harder to find, and the mechanic is pitching an electric scooter.", "opp": ["green", "grey", "brown"], "sol": "Keep repairing it: a 35-year-old scooter has already paid back its making, and Basavaraj's repair trade keeps money local. The central e-scooter subsidy is now only up to ₹5,000, so switching is mostly a full new purchase. Use the Chetak less: walk to Sankey Tank and the lab.", "who": "Basavaraj (9th Cross), Thatha", "cost": "Repairs, as now", "src": [["PM E-DRIVE e-2W incentive capped at ₹5,000", "https://www.autocarpro.in/news/govt-extends-pm-e-drive-subsidy-for-e2ws-till-fy28-increases-allocation-134036?amp=1"]], "scale": "alone", "after": ["green", "grey", "silver"]}}, {"id": "k21", "who": "paati", "time": "10:30", "place": "home", "zone": "gate", "pose": "paati_thamboolam", "title": "Five rupees off, in Kannada", "text": "The vegetable cart comes to the gate. Raw banana, beans and coconut into a cloth bag she stitched from an old sari. The vendor knocks off five rupees, as they both expected.", "eco": ["grey", "green"], "with": ["pushcart"]}, {"id": "k22", "who": "paati", "time": "11:00", "place": "home", "zone": "kitchen", "pose": "paati_cooking", "title": "Cooking for the whole house", "text": "Sundal for the evening (green gram, she decided), bisi bele bath and rasam, on the LPG stove.", "eco": ["brown", "silver"]}, {"id": "t17", "who": "thatha", "time": "12:30", "place": "home", "zone": "dining", "pose": "thatha_dinner", "title": "Not arguing with the news", "text": "Lunch on steel plates with AIR Bengaluru in Kannada on the radio. He isn't arguing with the newsreader, which Kamala knows means something is on his mind.", "eco": ["silver", "orange"], "with": ["paati_dinner"]}, {"id": "t18", "who": "thatha", "time": "13:15", "place": "home", "zone": "tpbed", "pose": "thatha_phone2", "title": "'UPI: Ananya method'", "text": "The auto-debit for the electricity bill failed and the app wants a UPI PIN he never set. Ananya talks him through it in four minutes. He writes the steps in his blue diary, under two earlier entries.", "eco": ["gold", "silver"], "note": "Reverse mentoring: the grandchild teaching the teacher.", "friction": {"f": "The auto-debit fails and the UPI app asks for a PIN he never set. This is the third entry in his blue diary.", "opp": ["gold", "silver"], "sol": "Keep the 'Ananya method' diary, which is reverse mentoring that works. Also enrol him in his bank's doorstep banking service: RBI asks banks to offer it to customers over 70, so cash and documents can be handled at home when the app fails.", "who": "His home bank branch, Ananya", "cost": "Free or a small fee per visit, depending on the bank", "src": [["RBI circular: doorstep banking for seniors", "https://rbi.org.in/Scripts/BS_CircularIndexDisplay.aspx?Id=11852"]], "scale": "together", "after": ["gold", "silver", "white"]}}, {"id": "a50", "who": "ananya", "time": "13:15", "place": "canteen", "zone": "main", "pose": "ananya_phone", "title": "Thatha's UPI PIN", "text": "Between labs: 'Thatha, did you click on any link?' 'I clicked on nothing. The phone clicked by itself.' Four minutes, then 'Love you Thatha, bye.'", "eco": ["gold", "silver"]}, {"id": "t19", "who": "thatha", "time": "14:00", "place": "home", "zone": "tpbed", "pose": "thatha_newspaper", "title": "He doesn't sleep in the afternoon", "text": "He wakes at 2:45 with the newspaper on his chest, then replies 'Bombe*' to Kamala's golu photo from the next room.", "eco": ["silver"]}, {"id": "k23", "who": "paati", "time": "18:45", "place": "home", "zone": "tpbed", "pose": "paati_voice", "title": "Calling Arvind's mother", "text": "On festivals only, so today: ten minutes in Tamil with Arvind's mother in Chennai. They've met five times in twenty-two years and know everything about each other.", "eco": ["silver", "gold"]}, {"id": "t20", "who": "thatha", "time": "20:50", "place": "home", "zone": "golu", "pose": "thatha_newspaper", "title": "Kannada news, then her serial", "text": "He watches the Kannada news; Kamala's Tamil serial follows. Their schedules have never overlapped, and that isn't an accident.", "eco": ["orange", "brown"]}, {"id": "k24", "who": "paati", "time": "21:15", "place": "home", "zone": "kitchen", "pose": "paati_cooking", "title": "Soaking dal for obbattu", "text": "She soaks chana dal and sets out jaggery. He asked for obbattu in his indirect way: 'It's been a long time since anyone made obbattu in this house.'", "eco": ["silver", "orange"]}, {"id": "t21", "who": "thatha", "time": "21:45", "place": "home", "zone": "tpbed", "pose": "thatha_diary", "title": "Sugar up. Walk 2 rounds.", "text": "He checks the gate is locked, twice. In the blue diary, in Kannada: 'Sugar up. Walk 2 rounds. Less obbattu.' Then he crosses out 'less obbattu'.", "eco": ["white", "silver"]}, {"id": "t22", "who": "thatha", "time": "22:00", "place": "home", "zone": "tpbed", "pose": "thatha_sleep", "title": "Asleep by ten", "text": "He turns off the golu lights but leaves the lamp burning. Asleep before the house is quiet.", "eco": ["silver"]}, {"id": "k25", "who": "paati", "time": "23:00", "place": "home", "zone": "tpbed", "pose": "paati_sleep", "title": "Half asleep, one last word", "text": "Ramachandra, half asleep, asks what she's telling them in the voice note. 'Nothing,' says Kamala, and turns off the light.", "eco": ["silver"]}, {"id": "p23", "who": "appa", "time": "23:00", "place": "home", "zone": "adbed", "pose": "appa_sleep", "title": "Phone on vibrate", "text": "He sets his phone to vibrate on the bedside table, where it will wake Deepa at 5:15, as it always does.", "eco": ["gold"]}, {"id": "d22", "who": "amma", "time": "23:00", "place": "home", "zone": "adbed", "pose": "amma_sleep", "title": "Lights out", "text": "Grab rails, the red oxide floor, her father's report. She falls asleep mid-list.", "eco": ["silver"]}];
+const DIMS = {"madhav_sleep": [900, 486], "scene_lab": [1400, 788], "madhav_gaming": [386, 702], "thatha_chetak_solo": [542, 900], "appa_laptop": [674, 872], "scene_site": [509, 465], "scene_canteen": [1400, 920], "madhav_eat": [442, 802], "ananya_standing": [261, 900], "paati_voice": [350, 805], "ananya_phone": [279, 900], "scene_phonefix": [1400, 914], "ananya_friends": [640, 470], "madhav_golu": [639, 900], "madhav_knee": [498, 630], "thatha_geometry": [1048, 892], "appa_tea": [642, 731], "scene_classroom": [1400, 908], "madhav_veshti": [243, 800], "ananya_kolam": [499, 736], "scene_gym": [1400, 914], "paati_tiffin": [298, 805], "madhav_headphones": [646, 900], "scene_college": [684, 514], "thatha_walking": [449, 900], "paati_dinner": [490, 810], "flower_seller": [892, 900], "madhav_filming": [296, 794], "paati_aarti": [310, 805], "amma_site": [321, 900], "paati_tutor": [510, 806], "scene_cafe": [500, 465], "thatha_sleep": [886, 523], "amma_sleep": [900, 490], "ananya_madhav_gaming": [695, 675], "scene_studio": [753, 527], "thatha_friends": [698, 720], "amma_eat": [466, 802], "thatha_singing": [1032, 908], "paati_cooking": [443, 900], "appa_dinner": [619, 900], "tuition_kids": [900, 500], "amma_site2": [528, 720], "ananya_walking": [426, 900], "scene_house": [3000, 1918], "paati_walking": [407, 900], "madhav_sorting": [619, 900], "appa_eat": [469, 822], "thatha_newspaper": [992, 1004], "thatha_sing2": [501, 729], "paati_kolam": [482, 789], "amma_coffee": [355, 900], "scene_tank": [684, 509], "scene_playground": [1400, 908], "appa_cab": [900, 363], "paati_sleep": [894, 528], "paati_thamboolam": [285, 805], "scene_road": [484, 465], "paati_golu": [577, 900], "appa_walk": [436, 900], "mechanic": [900, 661], "ironing_man": [938, 900], "scene_neighbour": [1400, 528], "appa_dishes": [330, 900], "scene_library": [1400, 920], "scene_pharmacy": [1400, 732], "lakshmamma": [557, 798], "scene_school": [684, 509], "thatha_walk": [550, 1050], "appa_sleep": [900, 503], "thatha_phone": [870, 896], "ananya_eat": [454, 802], "ananya_sleeping": [485, 685], "madhav_watering": [677, 900], "pushcart": [822, 900], "amma_car": [900, 423], "ananya_gaming": [378, 686], "scene_metro": [685, 514], "ananya_laptop": [637, 900], "thatha_chetak": [912, 1018], "scene_street": [1408, 1298], "thatha_diary": [900, 593], "scene_office": [754, 527], "appa_standing": [323, 900], "ananya_evening": [452, 900], "madhav_running": [543, 900], "amma_drawing": [466, 792], "madhav_cycling": [734, 900], "thatha_phone2": [291, 729], "madhav_dinner": [492, 730], "amma_dinner": [615, 900], "auto_driver": [1078, 900], "madhav_dance": [634, 771], "thatha_call": [508, 900], "amma_tea": [440, 776], "madhav_standing": [248, 900], "madhav_reading": [447, 900], "ananya_book": [270, 803], "thatha_dinner": [496, 816], "chai_vendor": [884, 900], "neighbour_son": [661, 900], "amma_phone": [303, 900], "amma_yoga": [730, 699]};
+
+const ECON = {
+  blue:  {n:'Blue',  c:'#3B82C4', t:'#9CC6EA', d:'Marine & freshwater: fisheries, water, water-based tourism'},
+  orange:{n:'Orange',c:'#EE7B30', t:'#F8B98A', d:'Cultural & creative industries: arts, fashion, design, media'},
+  green: {n:'Green', c:'#4E9F5A', t:'#A9D8AB', d:'Circular economy, renewables, green manufacturing'},
+  silver:{n:'Silver',c:'#A7AEB8', t:'#D5DAE0', d:'Needs and aspirations of an ageing population'},
+  white: {n:'White', c:'#FFFFFF', t:'#F1EBDD', d:'Health and social care'},
+  gold:  {n:'Gold',  c:'#C9971C', t:'#E9CD7E', d:'Technology & digitalisation'},
+  purple:{n:'Purple',c:'#7D4FB5', t:'#C7ABE6', d:'Disability inclusion & accessibility'},
+  grey:  {n:'Grey',  c:'#6F6F6F', t:'#BDBDBD', d:'Informal economy: untaxed, unregulated, untracked'},
+  brown: {n:'Brown', c:'#7A4A22', t:'#C9A27C', d:'Fossil fuels & non-renewable resources'},
+  yellow:{n:'Yellow',c:'#F0CB2E', t:'#F6E38E', d:'Desert economies: tourism, renewables, enterprise'}
+};
+const ECO_KEYS = Object.keys(ECON);
+
+const PEOPLE = {
+  ananya:{n:'Ananya', sub:'19 · granddaughter', poses:['ananya_standing','ananya_walking','ananya_phone','ananya_laptop','ananya_evening','ananya_kolam','ananya_sleeping','ananya_gaming','ananya_madhav_gaming','ananya_book','ananya_friends','ananya_eat']},
+  madhav:{n:'Madhav', sub:'14 · grandson', poses:['madhav_standing','madhav_running','madhav_watering','madhav_golu','madhav_cycling','madhav_reading','madhav_sorting','madhav_headphones','madhav_dinner','madhav_gaming','ananya_madhav_gaming','madhav_filming','madhav_veshti','madhav_dance','madhav_knee','madhav_eat','amma_car','madhav_sleep']},
+  paati: {n:'Kamala (Paati)', sub:'68 · grandmother', poses:['paati_cooking','paati_walking','paati_golu','paati_kolam','paati_tiffin','paati_voice','paati_aarti','paati_thamboolam','paati_tutor','paati_dinner','paati_sleep']},
+  thatha:{n:'Ramachandra (Thatha)', sub:'71 · grandfather', poses:['thatha_walk','thatha_newspaper','thatha_chetak','thatha_geometry','thatha_singing','thatha_phone','thatha_call','thatha_walking','thatha_sing2','thatha_phone2','thatha_friends','thatha_dinner','thatha_chetak_solo','thatha_diary','thatha_sleep']},
+  amma:  {n:'Deepa (Amma)', sub:'47 · architect', poses:['amma_site','amma_dinner','amma_yoga','amma_drawing','amma_phone','amma_coffee','amma_site2','amma_tea','amma_car','amma_eat','amma_sleep']},
+  appa:  {n:'Arvind (Appa)', sub:'48 · engineering manager', poses:['appa_standing','appa_dinner','appa_walk','appa_laptop','appa_dishes','appa_tea','appa_cab','appa_eat','appa_sleep']}
+};
+const FIG_PEOPLE = {amma_car:['amma','madhav'], thatha_chetak:['thatha','madhav'], ananya_madhav_gaming:['ananya','madhav'], appa_cab:['appa'], thatha_friends:['thatha']};
+const figPeople = pose => FIG_PEOPLE[pose] || [pose.split('_')[0]];
+const SLEEP = {paati:[285,1380], thatha:[300,1320], appa:[315,1380], amma:[320,1380], ananya:[435,1470], madhav:[360,1320]}; // [wake, bed] in minutes
+const CAST = ['mechanic','lakshmamma','tuition_kids','flower_seller','chai_vendor','ironing_man','pushcart','auto_driver','neighbour_son'];
+const POSE_LABEL = p => p.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+
+/* scale: height relative to a standing adult; sink: share of the drawing hidden below the floor */
+const POSE = {
+  ananya_standing:{s:.96}, ananya_walking:{s:.96}, ananya_phone:{s:.96}, ananya_laptop:{s:.8}, ananya_evening:{s:.96}, ananya_kolam:{s:.92}, ananya_sleeping:{s:.86}, madhav_dinner:{s:.8}, madhav_gaming:{s:.74}, ananya_gaming:{s:.72}, ananya_madhav_gaming:{s:.74},
+  madhav_standing:{s:.86}, madhav_running:{s:.8}, madhav_watering:{s:.78}, madhav_golu:{s:.86}, madhav_cycling:{s:.84},
+  madhav_reading:{s:.62,k:.12}, madhav_sorting:{s:.66}, madhav_headphones:{s:.62,k:.12},
+  paati_cooking:{s:.95}, paati_walking:{s:.95}, paati_golu:{s:.93},
+  thatha_call:{s:.8}, thatha_walking:{s:.98}, thatha_walk:{s:.98}, thatha_newspaper:{s:.82}, thatha_chetak:{s:1.0}, thatha_geometry:{s:.62}, thatha_singing:{s:.88}, thatha_phone:{s:.56},
+  amma_site:{s:1}, amma_dinner:{s:.8}, appa_standing:{s:1}, appa_dinner:{s:.8},
+  thatha_dinner:{s:.74}, paati_dinner:{s:.74}, appa_eat:{s:.76}, amma_eat:{s:.74}, madhav_eat:{s:.7}, ananya_eat:{s:.7},
+  paati_kolam:{s:.6}, paati_tiffin:{s:.93}, paati_voice:{s:.93}, paati_aarti:{s:.93}, paati_thamboolam:{s:.93}, paati_tutor:{s:.8},
+  thatha_sing2:{s:.98}, thatha_phone2:{s:.98}, thatha_friends:{s:1},
+  amma_yoga:{s:.52}, amma_drawing:{s:.8}, amma_phone:{s:1}, amma_coffee:{s:1}, amma_site2:{s:.72}, amma_tea:{s:.8}, amma_car:{s:.62},
+  appa_walk:{s:1}, appa_laptop:{s:.82}, appa_dishes:{s:1}, appa_tea:{s:.76}, appa_cab:{s:.62},
+  madhav_filming:{s:.86}, madhav_veshti:{s:.86}, madhav_dance:{s:.74}, madhav_knee:{s:.52}, ananya_book:{s:.94}, ananya_friends:{s:.68},
+  thatha_chetak_solo:{s:1.02}, mechanic:{s:.66}, lakshmamma:{s:.86}, tuition_kids:{s:.5}, thatha_diary:{s:.62},
+  thatha_sleep:{s:.5}, paati_sleep:{s:.5}, appa_sleep:{s:.5}, amma_sleep:{s:.5}, madhav_sleep:{s:.5},
+  flower_seller:{s:.66}, chai_vendor:{s:.82}, ironing_man:{s:.82}, pushcart:{s:.96}, auto_driver:{s:1.12}, neighbour_son:{s:.74}
+};
+
+/* floor: % from top where feet stand; h: % of scene height for a standing adult; slots: x positions (%) */
+const SCENES = {
+  home:   {n:'Home, Malleshwaram', img:'scene_house', zoom:2.3, zones:{
+            terrace: {n:'Terrace', floor:15.5, h:13, slots:[80,64,50,88]},
+            balcony: {n:'Balcony', floor:46, h:15, slots:[11,8,14]},
+            adbed:   {n:"Arvind & Deepa's room", floor:46, h:15, slots:[24,20,28]},
+            adbath:  {n:'Bathroom (upstairs)', floor:46, h:15, slots:[37.5,39,36]},
+            ananya:  {n:"Ananya's room", floor:46, h:15, slots:[50,46,54]},
+            upbath:  {n:'Shared bathroom', floor:46, h:15, slots:[76,74.5,77.5]},
+            study:   {n:'Study', floor:46, h:15, slots:[65,62,68]},
+            lounge:  {n:'Lounge', floor:46, h:15, slots:[89,85,93]},
+            golu:    {n:'Golu hall', floor:75.5, h:15, slots:[15,10,20,12]},
+            kitchen: {n:'Kitchen', floor:75.5, h:15, slots:[31,27,35]},
+            dining:  {n:'Dining', floor:75.5, h:15, slots:[46.5,42.5,50.5,38.5,54.5,35]},
+            stair:   {n:'Stairs', floor:75.5, h:15, slots:[57,55.5,58.5]},
+            tpbed:   {n:"Thatha & Paati's room", floor:75.5, h:15, slots:[67,63,71]},
+            bath:    {n:'Bathroom (downstairs)', floor:75.5, h:15, slots:[78.5,77,80]},
+            madhav:  {n:"Madhav's room", floor:75.5, h:15, slots:[90,86,94]},
+            verandah:{n:'Verandah', floor:96.5, h:18, slots:[16,24,10]},
+            door:    {n:'Front door', floor:96.5, h:18, slots:[63,69,57]},
+            gate:    {n:'Gate', floor:96.5, h:18, slots:[86,79,92]}}},
+  road:   {n:'Hebbal flyover', img:'scene_road', zones:{main:{n:'On the road', floor:84, h:30, slots:[42,30,54]}}},
+  office: {n:'Manyata Tech Park', img:'scene_office', zones:{main:{n:'Office', floor:97, h:52, slots:[30,14,46]}}},
+  studio: {n:'Studio, Sadashivanagar', img:'scene_studio', zones:{main:{n:'Studio', floor:97, h:56, slots:[60,44,78]}}},
+  site:   {n:'Site, Jayanagar', img:'scene_site', zones:{main:{n:'The red oxide floor', floor:97, h:58, slots:[44,26,70]}}},
+  cafe:   {n:'Café, Sampige Road', img:'scene_cafe', zones:{main:{n:'Café', floor:97, h:58, slots:[52,30,74]}}},
+  canteen:{n:'College canteen', img:'scene_canteen', zones:{main:{n:'Canteen', floor:97, h:56, slots:[30,14,46]}}},
+  library:{n:'College library', img:'scene_library', zones:{main:{n:'Library', floor:97, h:56, slots:[55,38,72]}}},
+  classroom:{n:'Classroom', img:'scene_classroom', zones:{main:{n:'Class 9', floor:97, h:52, slots:[30,70,18]}}},
+  playground:{n:'School playground', img:'scene_playground', zones:{main:{n:'Playground', floor:97, h:52, slots:[45,25,65]}}},
+  lab:    {n:'Diagnostic lab, Sampige Road', img:'scene_lab', zones:{main:{n:'Diagnostic lab', floor:97, h:56, slots:[40,24,60]}}},
+  pharmacy:{n:'Malleswaram Pharmacy', img:'scene_pharmacy', zones:{main:{n:'11th Main Road', floor:98, h:60, slots:[30,14,46]}}},
+  phonefix:{n:'Phone Fix', img:'scene_phonefix', zones:{main:{n:'11th Main Road', floor:98, h:62, slots:[58,40,76]}}},
+  gym:    {n:'Malleswaram Fitness Gym', img:'scene_gym', zones:{main:{n:'11th Main Road', floor:98, h:62, slots:[55,35,75]}}},
+  neighbour:{n:"Neighbour's house", img:'scene_neighbour', zones:{main:{n:'Golu room', floor:97, h:56, slots:[28,72,16,84]}}},
+  street: {n:'8th Cross', img:'scene_street', zones:{main:{n:'8th Cross', floor:93, h:46, slots:[62,30,80]}}},
+  metro:  {n:'Sampige Road metro', img:'scene_metro', zones:{main:{n:'Station', floor:97, h:52, slots:[50,28,74]}}},
+  college:{n:'College', img:'scene_college', zones:{main:{n:'Campus', floor:97, h:52, slots:[50,26,76]}}},
+  school: {n:'School', img:'scene_school', zones:{main:{n:'School', floor:97, h:52, slots:[50,26,76]}}},
+  tank:   {n:'Sankey Tank', img:'scene_tank', zones:{main:{n:'Lakeside walk', floor:97, h:52, slots:[40,22,62]}}}
+};
+
+const START = 300, END = 1485;
+const toMin = s => { const [h,m] = String(s||'0:0').split(':').map(Number); let v = h*60+(m||0); if (v < 300) v += 1440; return v; };
+const fmt = v => { v = ((v%1440)+1440)%1440; let h = Math.floor(v/60), m = v%60; const ap = h<12?'AM':'PM'; h = h%12||12; return h+':'+String(m).padStart(2,'0')+' '+ap; };
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ecoBg = (eco, key='c') => {
+  const e = (eco||[]).filter(k=>ECON[k]); if (!e.length) return '#fff';
+  if (e.length===1) return ECON[e[0]][key];
+  const step = 100/e.length;
+  return 'conic-gradient(' + e.map((k,i)=>`${ECON[k][key]} ${i*step}% ${(i+1)*step}%`).join(',') + ')';
+};
+const ecoStripes = eco => {
+  const e = (eco||[]).filter(k=>ECON[k]); if (!e.length) return 'transparent';
+  if (e.length===1) return ECON[e[0]].t;
+  const step = 100/e.length;
+  return 'linear-gradient(100deg,' + e.map((k,i)=>`${ECON[k].t} ${i*step}% ${(i+1)*step}%`).join(',') + ')';
+};
+
+/* ---------- state ---------- */
+let tps = [];          // all touchpoints, sorted
+let focus = 'ananya';
+let t = START;
+let selId = null;
+let lastScene = null;
+let canWrite = false, dbRef = null, userCap = null, names = {};
+let playing = null;
+
+function clean(raw){
+  return raw.filter(d => d && PEOPLE[d.who] && SCENES[d.place]).map(d => {
+    const zones = SCENES[d.place].zones;
+    const zone = zones[d.zone] ? d.zone : Object.keys(zones)[0];
+    const pose = POSE[d.pose] ? d.pose : PEOPLE[d.who].poses[0];
+    return {...d, zone, pose, eco:(Array.isArray(d.eco)?d.eco:[]).filter(k=>ECON[k]), with:(Array.isArray(d.with)?d.with:[]).filter(p=>POSE[p]).slice(0,2), m:toMin(d.time)};
+  }).sort((a,b)=>a.m-b.m || String(a.id).localeCompare(String(b.id)));
+}
+const people = () => Object.keys(PEOPLE).filter(p => tps.some(x=>x.who===p));
+const ofPerson = p => tps.filter(x=>x.who===p);
+function activeFor(p, at){
+  const list = ofPerson(p); if (!list.length) return null;
+  let cur = null; for (const x of list) { if (x.m <= at) cur = x; else break; }
+  return cur;
+}
+function selected(){
+  const s = tps.find(x=>x.id===selId);
+  if (s && s.who===focus) return s;
+  return activeFor(focus, t) || ofPerson(focus)[0] || null;
+}
+
+/* ---------- render ---------- */
+const $ = id => document.getElementById(id);
+
+function renderFollow(){
+  const box = $('follow');
+  box.querySelectorAll('.pill').forEach(n=>n.remove());
+  for (const p of people()){
+    const b = document.createElement('button');
+    b.className = 'pill'; b.type='button'; b.textContent = PEOPLE[p].n.split(' ')[0];
+    b.setAttribute('aria-pressed', p===focus);
+    b.onclick = () => { focus = p; const a = activeFor(p,t) || ofPerson(p)[0]; selId = a&&a.id; if (a && a.m>t) t=a.m; render(); };
+    box.appendChild(b);
+  }
+}
+
+function placeFigure(layer, R, zone, slotX, pose, eco, lit){
+  const dim = DIMS[pose]; if (!dim) return;
+  const meta = POSE[pose] || {s:1};
+  const fh = zone.h * meta.s;                       // % of scene height
+  const fw = fh * (dim[0]/dim[1]) / R;               // % of scene width
+  const clip = document.createElement('div');
+  clip.className = 'clip';
+  clip.style.height = zone.floor + '%';
+  clip.style.width = (fw + 2) + '%';
+  clip.style.left = (slotX - (fw+2)/2) + '%';
+  const fig = document.createElement('div');
+  fig.className = 'fig' + (lit ? ' lit' : ' dim');
+  const hRel = fh / zone.floor * 100;
+  fig.style.height = hRel + '%';
+  fig.style.bottom = (-(meta.k||0) * hRel) + '%';
+  const src = 'assets/' + pose + '.png';
+  fig.innerHTML = `<img src="${src}" alt="${esc(POSE_LABEL(pose))}"><div class="tint"></div>`;
+  const tint = fig.querySelector('.tint');
+  tint.style.background = ecoStripes(eco);
+  tint.style.webkitMaskImage = tint.style.maskImage = `url(${src})`;
+  clip.appendChild(fig); layer.appendChild(clip);
+  return fig;
+}
+
+function renderStage(){
+  const cur = selected();
+  const inner = $('inner'), sceneEl = $('scene');
+  const at = cur ? cur.m : t;
+  inner.classList.toggle('dusk', at >= 1080 && at < 1170);
+  inner.classList.toggle('night', at >= 1170 || at < 390);
+  $('clock').innerHTML = `<small>Thursday</small>${fmt(cur ? cur.m : t)}`;
+  if (!cur){ $('tag').textContent = 'No touchpoints yet'; $('figs').innerHTML=''; $('beads').innerHTML=''; return; }
+  const sc = SCENES[cur.place];
+  $('tag').textContent = sc.n + (Object.keys(sc.zones).length>1 ? ' · ' + sc.zones[cur.zone].n : '');
+  const dim = sc.img ? DIMS[sc.img] : [1400,1000]; const R = dim[0]/dim[1];
+  const draw = () => {
+    sceneEl.style.setProperty('--r', R);
+    { const ib = $('inner').getBoundingClientRect(); const boxR = ib.width / Math.max(1, ib.height);
+      const hPct = 96 * boxR / R;
+      if (hPct < 93){ sceneEl.style.top = ((100 - hPct)/2) + '%'; sceneEl.style.bottom = ((100 - hPct)/2) + '%'; }
+      else { sceneEl.style.top = ''; sceneEl.style.bottom = ''; } }
+    $('bg').style.visibility = sc.img ? '' : 'hidden'; if (sc.img) $('bg').src = 'assets/' + sc.img + '.png'; else $('bg').removeAttribute('src');
+    $('ph').textContent = sc.img ? '' : sc.ph; $('ph').style.display = sc.img ? 'none' : '';
+    const figs = $('figs'); figs.innerHTML = '';
+    const used = {};
+    const take = z => { used[z] = (used[z]||0); return used[z]++; };
+    // other family members' current moments in this same place (drawn first, behind)
+    let others = 0;
+    for (const p of people()){
+      if (p === focus) continue;
+      const o = activeFor(p, cur.m);
+      if (others >= 2 && !(o && o.zone === cur.zone && o.place === cur.place)) continue;
+      if (others >= 5) continue;
+      const shown = [cur.pose,...(cur.with||[])].flatMap(figPeople);
+      if (o && o.place === cur.place && cur.place !== 'road' && cur.m - o.m <= 45 && !shown.includes(p) && ![o.pose,...(o.with||[])].flatMap(figPeople).some(q=>shown.includes(q))){
+        const z = sc.zones[o.zone]; const i = o.zone===cur.zone ? take(o.zone)+1 : take(o.zone);
+        placeFigure(figs, R, z, z.slots[Math.min(i, z.slots.length-1)] + (i>=z.slots.length?6:0), o.pose, o.eco, false); others++;
+      }
+    }
+    const z = sc.zones[cur.zone];
+    setCam(sc, z, sc.zones[cur.zone].slots[0]);
+    const mine = [];
+    const extra = FX_FIG[cur.id] || {};
+    const withs = [...(cur.with||[])];
+    if (extra.inv) withs.push(extra.inv);
+    if (extra.help && isFixed(cur)) withs.push(extra.help);
+    withs.forEach((w) => { const i = take(cur.zone)+1; const fg = placeFigure(figs, R, z, z.slots[Math.min(i, z.slots.length-1)] + (i>=z.slots.length? 7*(i-z.slots.length+1):0), w, effEco(cur), true); if (fg){ mine.push(fg.parentNode); if (w===extra.help) fg.classList.add('helper'); } });
+    const mainFig = placeFigure(figs, R, z, z.slots[0], cur.pose, effEco(cur), true);
+    if (mainFig) mine.push(mainFig.parentNode);
+    drawFriction(figs, R, sc, z, cur, mainFig, mine);
+    // beads: this person's moments in this place so far
+    const beads = $('beads'); beads.innerHTML = '';
+    const byZone = {};
+    for (const x of ofPerson(focus)) if (x.place===cur.place && x.m <= cur.m) (byZone[x.zone] ||= []).push(x);
+    for (const [zk, list] of Object.entries(byZone)){
+      const zz = sc.zones[zk]; const row = document.createElement('div');
+      row.className = 'brow'; row.style.left = zz.slots[0] + '%';
+      row.style.top = Math.min(zz.floor + 1.2, 97) + '%';
+      if (zz.floor > 90) { row.style.top = 'auto'; row.style.bottom = (100 - zz.floor + zz.h*0.98 + 2) + '%'; }
+      for (const x of list){
+        const b = document.createElement('button'); b.type='button';
+        b.className = 'bead' + (x.id===cur.id?' on':''); b.style.background = ecoBg(effEco(x));
+        b.title = fmt(x.m) + ' · ' + x.title; b.setAttribute('aria-label', b.title);
+        b.onclick = () => select(x); row.appendChild(b);
+      }
+      beads.appendChild(row);
+    }
+  };
+  clearTimeout(window.__drawT); sceneEl.classList.remove('leaving');
+  if (lastScene && lastScene !== cur.place){
+    sceneEl.classList.add('leaving');
+    window.__drawT = setTimeout(()=>{ draw(); sceneEl.classList.remove('leaving'); }, 260);
+  } else draw();
+  lastScene = cur.place;
+}
+
+let wholeHouse = false;
+function setCam(sc, z, x){
+  const cam = $('cam'); const zoom = (sc.zoom && !wholeHouse) ? sc.zoom : 1;
+  $('zoomBtn').hidden = !sc.zoom;
+  $('zoomBtn').textContent = wholeHouse ? '⤡ Zoom to room' : '⤢ Whole house';
+  if (zoom === 1){ cam.style.transform = 'none'; return; }
+  const cy = z.floor - z.h*0.55;
+  let tx = 50 - x*zoom, ty = 50 - cy*zoom;
+  tx = Math.min(0, Math.max(100-100*zoom, tx)); ty = Math.min(0, Math.max(100-100*zoom, ty));
+  cam.style.transform = `translate(${tx}%, ${ty}%) scale(${zoom})`;
+}
+$('zoomBtn').onclick = () => { wholeHouse = !wholeHouse; renderStage(); };
+/* ---------- frictions & fixes ---------- */
+let fixAll = false; const fixed = {};
+const hasFx = x => !!(x && x.friction && x.friction.f);
+const isFixed = x => hasFx(x) && (fixAll || !!fixed[x.id]);
+const afterEco = x => (x.friction.after||x.friction.opp||[]).filter(k=>ECON[k]);
+const effEco = x => isFixed(x) && afterEco(x).length ? afterEco(x) : x.eco;
+// where the trouble sits on the main figure (x,y as fraction of the figure box), and extra figures
+const FX_SPOT = {t15:[.55,.42], t18:[.62,.18], t16:[.45,.72], m09:[.5,.62], a32:[.5,.45], d08:[.5,.9], a15:[.5,.6]};
+const FX_FIG = {d15:{inv:'thatha_walking'}, t18:{help:'ananya_phone'}, k19:{help:'ananya_phone'}, k07:{help:'ananya_phone'}, a41:{help:'appa_standing'}, a43:{help:'amma_drawing'}, a30:{help:'paati_golu'}};
+const FX_Y = {d15:.04, k19:.35, k07:.35};   // height of a shared crack above the floor, as a share of the room height
+function scribblePath(seed){
+  let r = seed*9301+49297, rnd = () => (r = (r*9301+49297)%233280)/233280;
+  let d = ''; const loops = 4;
+  for (let i=0;i<=loops*14;i++){ const a = i/14*Math.PI*2, rr = 30 + rnd()*14 - (i/(loops*14))*6;
+    const x = 50 + Math.cos(a)*rr + (rnd()-.5)*8, y = 50 + Math.sin(a)*rr*.72 + (rnd()-.5)*8; d += (i?'L':'M') + x.toFixed(1)+','+y.toFixed(1); }
+  return d;
+}
+function crackPath(seed){
+  let r = seed*7919+13, rnd = () => (r = (r*9301+49297)%233280)/233280;
+  let d = 'M0,50', d2 = ''; const n = 22;
+  for (let i=1;i<=n;i++){ const x = i/n*100, y = 50 + (rnd()-.5)*70; d += ` L${x.toFixed(1)},${y.toFixed(1)}`;
+    if (i%4===2) d2 += ` M${x.toFixed(1)},${y.toFixed(1)} l${(rnd()*6-3).toFixed(1)},${(y<50?-1:1)*(18+rnd()*12)}`; }
+  return [d, d2];
+}
+const seedOf = id => [...String(id)].reduce((a,c)=>a+c.charCodeAt(0),0);
+function fxTip(x){ const f = x.friction, ok = isFixed(x);
+  return `<span class="fxtip" role="tooltip"><b>${ok?'✓ Fixed':'⚡ Friction · '+(f.scale==='together'?'faced together':'faced alone')}</b>${esc(ok? f.sol : f.f)}<i>${ok?'Click to undo':'Click to apply the fix'}</i></span>`; }
+function wireTip(b, x){
+  const show = () => { const tip = $('fxTipBox'), ir = $('inner').getBoundingClientRect(), br = b.getBoundingClientRect();
+    tip.innerHTML = fxTip(x); tip.classList.add('on');
+    const w = 250, cx = Math.min(Math.max(br.left + br.width/2 - ir.left, w/2 + 8), ir.width - w/2 - 8);
+    tip.style.left = cx + 'px'; tip.style.top = Math.max(br.top - ir.top, 90) + 'px'; };
+  const hide = () => $('fxTipBox').classList.remove('on');
+  b.addEventListener('mouseenter', show); b.addEventListener('focus', show);
+  b.addEventListener('mouseleave', hide); b.addEventListener('blur', hide);
+  b.addEventListener('click', () => setTimeout(show, 30));
+}
+function toggleFix(x){ if (fixAll){ fixAll = false; for (const y of tps) if (hasFx(y)) fixed[y.id] = true; syncFixBtn(); }
+  fixed[x.id] = !fixed[x.id]; render(); }
+function syncFixBtn(){ const b = $('fixAllBtn'); if (!b) return; b.setAttribute('aria-pressed', fixAll); b.textContent = fixAll ? 'Fixes: on' : 'Fixes: off'; }
+function drawFriction(figs, R, sc, z, cur, mainFig, clips){
+  if (!hasFx(cur)) return;
+  const ok = isFixed(cur), f = cur.friction, seed = seedOf(cur.id);
+  if (f.scale !== 'together' && mainFig){
+    const [fx, fy] = FX_SPOT[cur.id] || [.5,.4];
+    const meta = POSE[cur.pose] || {s:1}, fh = z.h*meta.s, clip = mainFig.parentNode;
+    const fw = parseFloat(clip.style.width) - 2, left = parseFloat(clip.style.left) + 1;
+    const top = z.floor + (meta.k||0)*fh - fh;
+    const b = document.createElement('button'); b.type='button'; b.className = 'scrib' + (ok?' fixed':'');
+    b.style.left = (left + fx*fw) + '%'; b.style.top = (top + fy*fh) + '%';
+    b.setAttribute('aria-label', (ok?'Fixed: ':'Friction: ') + f.f);
+    b.innerHTML = `<svg viewBox="0 0 100 100"><path d="${scribblePath(seed)}"/></svg><span class="ok">✓</span>`;
+    b.onclick = e => { e.stopPropagation(); toggleFix(cur); };
+    wireTip(b, cur); figs.appendChild(b); return;
+  }
+  // shared friction: a crack across the room that touches everyone involved
+  let lo = 100, hi = 0;
+  for (const c of clips){ const l = parseFloat(c.style.left), w = parseFloat(c.style.width); lo = Math.min(lo, l + w*.2); hi = Math.max(hi, l + w*.8); }
+  if (hi - lo < 14){ const mid = (lo+hi)/2; lo = mid - 9; hi = mid + 9; }
+  const y = z.floor - z.h * (FX_Y[cur.id] ?? .5);
+  const b = document.createElement('button'); b.type='button'; b.className = 'crack' + (ok?' fixed':'');
+  b.style.left = lo + '%'; b.style.width = (hi-lo) + '%'; b.style.top = y + '%';
+  b.setAttribute('aria-label', (ok?'Fixed: ':'Friction, faced together: ') + f.f);
+  const [p1, p2] = crackPath(seed);
+  b.innerHTML = `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${p1}"/><path class="c2" d="${p2}"/></svg><span class="ok">✓</span>`;
+  b.onclick = e => { e.stopPropagation(); toggleFix(cur); };
+  wireTip(b, cur); figs.appendChild(b);
+}
+function footprint(list){
+  const c = {}; ECO_KEYS.forEach(k=>c[k]=0);
+  for (const x of list){ const e = effEco(x); for (const k of e) c[k] += 1/e.length; }
+  const total = Object.values(c).reduce((a,b)=>a+b,0);
+  return {c, total};
+}
+function barHTML(fpr){
+  if (!fpr.total) return '<div class="bar"></div>';
+  return '<div class="bar">' + ECO_KEYS.filter(k=>fpr.c[k]>0).map(k=>`<span title="${ECON[k].n}: ${Math.round(fpr.c[k]/fpr.total*100)}%" style="flex-grow:${fpr.c[k]};background:${ECON[k].c}"></span>`).join('') + '</div>';
+}
+
+function lighterHTML(){
+  const list = tps.filter(isFixed); const nFix = list.length; if (!nFix) return '';
+  const raw = xs => { const c={}; ECO_KEYS.forEach(k=>c[k]=0); for (const x of xs){ const e=x.eco; for (const k of e) c[k]+=1/e.length; } return {c,total:Object.values(c).reduce((a,b)=>a+b,0)}; };
+  const pc = (f,k) => f.total ? f.c[k]/f.total*100 : 0;
+  const fb = raw(list), fa = footprint(list), was = raw(tps), now = footprint(tps);
+  const ch = ['brown','grey','green','white'].map(k=>[k, pc(fa,k)-pc(fb,k)]).filter(([k,v])=>Math.abs(v)>=0.5);
+  const day = ['brown','grey','green'].map(k=>{ const v = pc(now,k)-pc(was,k); return `${ECON[k].n} ${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}`; }).join(' · ');
+  return `<h3>${nFix===1?'This friction':'The '+nFix+' friction moments'}: before and after</h3>
+  <p class="sub">Before</p>${barHTML(fb)}<p class="sub" style="margin-top:6px">With the fix${nFix>1?'es':''}</p>${barHTML(fa)}
+  <p class="lighter">${ch.some(([k,v])=>(k==='brown'||k==='grey')&&v<0)?'The house gets lighter. ':''}${ch.length?ch.map(([k,v])=>`<b>${ECON[k].n} ${v>0?'+':'−'}${Math.abs(v).toFixed(0)} pts</b>`).join(' · '):'The same economies, working better for the family.'}<br><span style="color:var(--ink2)">Across the whole day: ${day} pts</span></p>`;
+}
+function fxHTML(x){
+  const f = x.friction; if (!f || !f.f) return '';
+  const opp = (f.opp||[]).filter(k=>ECON[k]);
+  return `<div class="fx${isFixed(x)?' isfixed':''}"><div class="fx-h"><span>⚡ Friction → Opportunity</span><span>${f.scale==='together'?'Faced together':'Faced alone'}</span></div><div class="fx-b">
+    <p class="fx-f"><b>Friction.</b> ${esc(f.f)}</p>
+    <p class="fx-arrow">After the fix ${afterEco(x).map(k=>`<i style="background:${ECON[k].c}"></i>${ECON[k].n}`).join(' + ')}</p>
+    <p class="fx-s"><b>Accessible fix.</b> ${esc(f.sol||'')}</p>
+    <dl>${f.who?`<dt>Who helps</dt><dd>${esc(f.who)}</dd>`:''}${f.cost?`<dt>Cost</dt><dd>${esc(f.cost)}</dd>`:''}</dl>
+    <button type="button" class="fxbtn" id="fxToggle">${isFixed(x)?'Undo the fix':'Apply the fix'}</button>
+    ${(f.src||[]).length?`<p class="fx-src">Source: ${f.src.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(' · ')}</p>`:''}
+  </div></div>`;
+}
+function renderOpps(){
+  const el = $('opgrid'); if (!el) return;
+  const list = tps.filter(x=>x.friction && x.friction.f);
+  $('oppCount').textContent = list.length;
+  el.innerHTML = list.map(x=>{ const f=x.friction; return `<button type="button" class="op" data-id="${esc(x.id)}">
+    <div class="om"><b>${esc(PEOPLE[x.who].n.split(' ')[0])}</b><span>${fmt(x.m)}</span><span class="scale">${f.scale==='together'?'together':'alone'}</span></div>
+    <div class="ot">${esc(x.title)}</div>
+    <div class="of">⚡ ${esc(f.f)}</div>
+    <div class="oc">${(x.eco||[]).map(k=>`<i style="background:${ECON[k].c}"></i>`).join('')} → ${(f.opp||[]).filter(k=>ECON[k]).map(k=>`<i style="background:${ECON[k].c}"></i>${ECON[k].n}`).join(' ')}</div>
+    <div class="os">${esc(f.sol)}</div></button>`; }).join('');
+  el.querySelectorAll('.op').forEach(b=>b.onclick=()=>{ const x=tps.find(y=>y.id===b.dataset.id); if (viewAll) setView(false); select(x); window.scrollTo({top:0,behavior:'smooth'}); });
+}
+function renderCard(){
+  const cur = selected(); const card = $('card');
+  if (!cur){ card.innerHTML = `<h2>Nothing here yet</h2><p class="story">Add a first touchpoint with “Edit touchpoints”.</p>`; return; }
+  const sc = SCENES[cur.place];
+  const list = ofPerson(focus); const i = list.indexOf(cur);
+  const upto = list.filter(x=>x.m<=cur.m);
+  const mine = footprint(upto);
+  const house = footprint(tps.filter(x=>x.m<=cur.m));
+  const top = ECO_KEYS.filter(k=>mine.c[k]>0).sort((a,b)=>mine.c[b]-mine.c[a]);
+  const brownPct = mine.total ? Math.round(mine.c.brown/mine.total*100) : 0;
+  const greenPct = mine.total ? Math.round(mine.c.green/mine.total*100) : 0;
+  const by = cur.updatedBy && names[cur.updatedBy] ? `<p class="by">Last edited by ${esc(names[cur.updatedBy])}</p>` : '';
+  card.innerHTML = `
+    <div class="meta"><b>${esc(PEOPLE[cur.who].n)}</b><span>${fmt(cur.m)}</span><span>${esc(sc.n)}${Object.keys(sc.zones).length>1?' · '+esc(sc.zones[cur.zone].n):''}</span></div>
+    <h2>${esc(cur.title)}</h2>
+    <p class="story">${esc(cur.text)}</p>
+    <div class="chips">${cur.eco.map(k=>`<div class="chip"><span class="sw" style="background:${ECON[k].c}"></span><div><b>${ECON[k].n}</b> — ${esc(ECON[k].d)}</div></div>`).join('') || '<div class="chip">No economy tagged yet.</div>'}</div>
+    ${cur.note?`<p class="note">${esc(cur.note)}</p>`:''}
+    ${fxHTML(cur)}
+    ${by}
+    <div class="nav"><button type="button" id="prev" ${i<=0?'disabled':''}>← Previous</button><button type="button" id="next" ${i>=list.length-1?'disabled':''}>Next →</button></div>
+    <div class="fp">
+      <h3>${esc(PEOPLE[focus].n.split(' ')[0])}'s day so far</h3>
+      <p class="sub">${upto.length} of ${list.length} touchpoints, split by economy</p>
+      ${barHTML(mine)}
+      <div class="barlbl"><span>${top.slice(0,3).map(k=>ECON[k].n+' '+Math.round(mine.c[k]/mine.total*100)+'%').join(' · ')}</span></div>
+      <h3>The whole household so far</h3>
+      ${barHTML(house)}
+      <div class="barlbl"><span>${tps.filter(x=>x.m<=cur.m).length} touchpoints across ${people().length} people</span></div>
+      ${lighterHTML()}
+      <p class="callout">Brown so far: <b>${brownPct}%</b> of ${esc(PEOPLE[focus].n.split(' ')[0])}'s day, against <b>${greenPct}%</b> Green. Is it one big brown circle?</p>
+    </div>`;
+  if ($('fxToggle')) $('fxToggle').onclick = () => toggleFix(cur);
+  $('prev').onclick = () => i>0 && select(list[i-1]);
+  $('next').onclick = () => i<list.length-1 && select(list[i+1]);
+}
+
+function renderTimeline(){
+  const el = $('tracks'); el.innerHTML = '';
+  const pct = m => ((m-START)/(END-START)*100);
+  for (const p of people()){
+    const nm = document.createElement('div'); nm.className='tname';
+    nm.innerHTML = `${esc(PEOPLE[p].n.split(' ')[0])}<small>${esc(PEOPLE[p].sub)}</small>`;
+    const rail = document.createElement('div'); rail.className = 'rail' + (p===focus?'':' faded');
+    const cur = selected();
+    for (const x of ofPerson(p)){
+      const b = document.createElement('button'); b.type='button';
+      b.className = 'tb' + (cur && x.id===cur.id ? ' on' : '') + (x.friction&&x.friction.f?' fx':''); b.dataset.id = x.id;
+      b.style.left = pct(x.m)+'%'; b.style.background = ecoBg(effEco(x));
+      b.title = fmt(x.m)+' · '+x.title; b.setAttribute('aria-label', PEOPLE[p].n+', '+b.title);
+      b.onclick = () => { focus = p; select(x); };
+      rail.appendChild(b);
+    }
+    el.append(nm, rail);
+  }
+  const ticks = document.createElement('div'); ticks.className='ticks';
+  for (let m=360; m<=1440; m+=120){ const s=document.createElement('span'); s.style.left=pct(m)+'%'; s.textContent = fmt(m).replace(':00',''); ticks.appendChild(s); }
+  const sp = document.createElement('div');
+  el.append(sp, ticks);
+  const sp2 = document.createElement('div');
+  const scrub = document.createElement('input'); scrub.type='range'; scrub.className='scrub';
+  scrub.min=START; scrub.max=END; scrub.step=5; scrub.value=t; scrub.setAttribute('aria-label','Time of day');
+  scrub.oninput = () => { stop(); setTime(+scrub.value); };
+  el.append(sp2, scrub);
+  const head = document.createElement('div'); head.className='head'; head.id='head'; el.appendChild(head);
+  positionHead();
+}
+function positionHead(){
+  const head = $('head'); if (!head) return;
+  const rail = $('tracks').querySelector('.rail'); if (!rail) { head.style.display='none'; return; }
+  const cur = selected(); const m = cur ? cur.m : t;
+  const x = rail.offsetLeft + rail.offsetWidth * ((m-START)/(END-START));
+  head.style.display=''; head.style.left = x + 'px';
+  const sc = $('tracks').querySelector('.scrub'); if (sc && document.activeElement!==sc) sc.value = t;
+}
+function renderStageCard(){ renderStage(); renderCard(); if (typeof drawClock==='function') drawClock();
+  const cur = selected();
+  document.querySelectorAll('.rail .tb.on').forEach(n=>n.classList.remove('on'));
+  if (cur) document.querySelectorAll('.rail .tb').forEach(n=>{ if (n.dataset.id === cur.id) n.classList.add('on'); });
+}
+function renderLegend(){
+  $('legend').innerHTML = '<h3>The rainbow economy</h3>' + ECO_KEYS.map(k=>`<div class="chip"><span class="sw" style="background:${ECON[k].c}"></span><div><b>${ECON[k].n}</b> — ${esc(ECON[k].d)}</div></div>`).join('');
+}
+function render(){ renderOpps(); renderFollow(); renderStage(); renderCard(); renderTimeline(); if (typeof drawClock==='function') drawClock(); if (viewAll) renderAll(); }
+
+function select(x){ if (!x) return; focus = x.who; selId = x.id; t = x.m; render(); if ($('drawer').classList.contains('open')) fillForm(x); }
+
+/* ---------- play ---------- */
+function stop(){ if (playing){ clearInterval(playing); playing=null; $('play').textContent='▶'; $('play').setAttribute('aria-label','Play the day'); } }
+$('play').onclick = () => {
+  if (playing) return stop();
+  const list = ofPerson(focus); if (!list.length) return;
+  let cur = selected(); if (cur === list[list.length-1]) select(list[0]);
+  $('play').textContent='❚❚'; $('play').setAttribute('aria-label','Pause');
+  playing = setInterval(() => {
+    const l = ofPerson(focus), c = selected(), i = l.indexOf(c);
+    if (i >= l.length-1) return stop();
+    select(l[i+1]);
+  }, 2600);
+};
+
+/* parallax */
+$('inner').addEventListener('pointermove', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty('--px', ((e.clientX-r.left)/r.width-.5)*2);
+  e.currentTarget.style.setProperty('--py', ((e.clientY-r.top)/r.height-.5)*2);
+});
+$('inner').addEventListener('pointerleave', e => { e.currentTarget.style.setProperty('--px',0); e.currentTarget.style.setProperty('--py',0); });
+addEventListener('resize', positionHead);
+addEventListener('keydown', e => {
+  if (e.target.closest('input,textarea,select') || !$('intro').classList.contains('hide')) return;
+  const l = ofPerson(focus), i = l.indexOf(selected());
+  if (e.key==='ArrowRight' && i<l.length-1){ stop(); select(l[i+1]); }
+  if (e.key==='ArrowLeft' && i>0){ stop(); select(l[i-1]); }
+});
+
+/* ---------- editing ---------- */
+let editingId = null, pickedEco = new Set();
+function opt(v, label, sel){ return `<option value="${esc(v)}"${sel?' selected':''}>${esc(label)}</option>`; }
+function fillZones(place, zone){ const z = SCENES[place].zones; $('fZone').innerHTML = Object.entries(z).map(([k,v])=>opt(k,v.n,k===zone)).join(''); $('fZone').disabled = Object.keys(z).length<2; }
+function fillPoses(who, pose){ $('fPose').innerHTML = PEOPLE[who].poses.map(p=>opt(p,POSE_LABEL(p),p===pose)).join(''); }
+function fillWith(sel, val){
+  const all = [...Object.values(PEOPLE).flatMap(p=>p.poses), ...CAST];
+  sel.innerHTML = opt('', '— nobody —', !val) + all.map(p=>opt(p,POSE_LABEL(p),p===val)).join('');
+}
+function renderEcoPick(){
+  $('fEco').innerHTML = ECO_KEYS.map(k=>`<button type="button" data-k="${k}" aria-pressed="${pickedEco.has(k)}"><i style="background:${ECON[k].c}"></i>${ECON[k].n}</button>`).join('');
+  $('fEco').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const k=b.dataset.k; pickedEco.has(k)?pickedEco.delete(k):pickedEco.add(k); renderEcoPick(); });
+}
+function fillForm(x){
+  editingId = x ? x.id : null;
+  const who = x ? x.who : focus;
+  $('dTitle').textContent = x ? 'Edit touchpoint' : 'New touchpoint';
+  $('fWho').innerHTML = Object.entries(PEOPLE).map(([k,v])=>opt(k,v.n,k===who)).join('');
+  $('fTime').value = x ? x.time : '09:00';
+  $('fPlace').innerHTML = Object.entries(SCENES).map(([k,v])=>opt(k,v.n,x?k===x.place:k==='home')).join('');
+  fillZones(x?x.place:'home', x?x.zone:'dining');
+  fillPoses(who, x?x.pose:null);
+  fillWith($('fWith1'), x&&x.with[0]); fillWith($('fWith2'), x&&x.with[1]);
+  $('fTitle').value = x?x.title:''; $('fText').value = x?x.text:''; $('fNote').value = x?(x.note||''):'';
+  pickedEco = new Set(x?x.eco:[]); renderEcoPick();
+  $('delBtn').style.display = x ? '' : 'none';
+  $('status').textContent = '';
+  const lock = !canWrite;
+  $('form').querySelectorAll('input,select,textarea,button').forEach(n=>n.disabled = lock);
+  if (!lock && $('fZone').options.length<2) $('fZone').disabled = true;
+}
+$('fWho').onchange = () => fillPoses($('fWho').value);
+$('fPlace').onchange = () => fillZones($('fPlace').value);
+$('editBtn').onclick = () => { stop(); $('drawer').classList.add('open'); $('drawer').setAttribute('aria-hidden','false'); fillForm(selected()); };
+$('closeDrawer').onclick = () => { $('drawer').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true'); };
+$('newBtn').onclick = () => fillForm(null);
+$('form').onsubmit = async e => {
+  e.preventDefault(); if (!dbRef || !canWrite) return;
+  const id = editingId || ('tp-' + Date.now().toString(36) + Math.random().toString(36).slice(2,6));
+  const time = $('fTime').value;
+  const body = {
+    id, who:$('fWho').value, time, place:$('fPlace').value, zone:$('fZone').value, pose:$('fPose').value,
+    with:[$('fWith1').value,$('fWith2').value].filter(Boolean), title:$('fTitle').value.trim(), text:$('fText').value.trim(),
+    eco:[...pickedEco], note:$('fNote').value.trim(), updatedAt:new Date().toISOString()
+  };
+  { const prev = tps.find(x=>x.id===id); if (prev && prev.friction) body.friction = prev.friction; }
+  try { const uid = userCap && await userCap.id(); if (uid) body.updatedBy = uid; } catch(_){}
+  $('status').textContent = 'Saving…';
+  try { await dbRef.doc(id).set(body); editingId = id; selId = id; focus = body.who; t = toMin(time); $('status').textContent = 'Saved. Everyone with the link sees this now.'; $('delBtn').style.display=''; }
+  catch(err){ $('status').textContent = err && err.code==='invalid_argument' ? 'You can view this page but not edit it. Ask Arun to share it with you as an Editor.' : 'Could not save just now. Try again in a moment.'; if (err&&err.code==='invalid_argument'){ canWrite=false; fillForm(tps.find(x=>x.id===editingId)); } }
+};
+const delPanel = { armed:false };
+$('delBtn').onclick = async () => {
+  if (!dbRef || !editingId) return;
+  if (!delPanel.armed){ delPanel.armed = true; $('delBtn').textContent = 'Tap again to delete'; setTimeout(()=>{delPanel.armed=false; $('delBtn').textContent='Delete';}, 3500); return; }
+  delPanel.armed = false; $('delBtn').textContent='Delete';
+  try { await dbRef.doc(editingId).delete(); $('status').textContent = 'Deleted.'; selId = null; fillForm(null); }
+  catch(_){ $('status').textContent = 'Could not delete just now.'; }
+};
+
+/* ---------- data ---------- */
+async function resolveNames(){
+  if (!userCap) return;
+  const ids = [...new Set(tps.map(x=>x.updatedBy).filter(Boolean))].filter(id=>!(id in names));
+  if (!ids.length) return;
+  try { const ps = await userCap.profiles(ids); for (const id of ids) names[id] = (ps[id] && ps[id].name) || 'A teammate'; renderCard(); } catch(_){}
+}
+function useSeed(msg){ tps = clean(SEED); $('banner').textContent = msg; render(); }
+
+
+/* ---------- intro: meet the family ---------- */
+const CAST_INTRO = [
+  {p:'thatha', pose:'thatha_walk', head:'thatha_phone2', gen:'Baby Boomer', role:'71 · retired maths teacher', bio:'Third generation of his family in Malleshwaram. Walks Sankey Tank every morning, still rides the 1980s Chetak, and corrects “golu” to “bombe” in the family group.'},
+  {p:'paati', pose:'paati_tiffin', head:'paati_voice', gen:'Baby Boomer', role:'68 · retired English teacher', bio:'Came from Kumbakonam in 1979. Draws the kolam at dawn, runs the golu, tutors three neighbourhood children, and speaks in 90-second Tamil voice notes.'},
+  {p:'appa', pose:'appa_walk', head:'appa_walk', gen:'Gen X', role:'48 · engineering manager', bio:'From Chennai, in Bengaluru since 2002. Manages fourteen engineers at Manyata Tech Park, takes US calls at night, and does the dishes without fail.'},
+  {p:'amma', pose:'amma_phone', head:'amma_phone', gen:'Gen X', role:'47 · architect', bio:'Grew up in this house. Runs a six-person restoration practice in Sadashivanagar and switches between Kannada, Tamil and English depending on who needs convincing.'},
+  {p:'ananya', pose:'ananya_book', head:'ananya_book', gen:'Gen Z', role:'19 · computer science student', bio:'Second year in Mathikere. Freelances posters, journals on paper, borrows Schumacher from the library, and sleeps after midnight.'},
+  {p:'madhav', pose:'madhav_filming', head:'madhav_filming', gen:'Gen Alpha', role:'14 · Class 9', bio:'Eco-club rule-maker, Minecraft builder, Bharatanatyam student, and future gaming content creator. Lives downstairs with his grandparents, for now.'}
+];
+let iIdx = 0;
+function introRender(full){
+  const c = CAST_INTRO[iIdx], P = PEOPLE[c.p];
+  const dim = DIMS[c.pose] || [1,2];
+  $('spin').style.setProperty('--ar', dim[0]/dim[1]);
+  $('iFront').src = $('iBack').src = 'assets/' + c.pose + '.png';
+  $('iFront').alt = P.n;
+  $('iGen').textContent = c.gen;
+  $('iName').textContent = P.n;
+  $('iRole').textContent = c.role;
+  $('iBio').textContent = c.bio;
+  const fp = footprint(ofPerson(c.p));
+  const top = ECO_KEYS.filter(k=>fp.c[k]>0).sort((a,b)=>fp.c[b]-fp.c[a]);
+  $('iStats').innerHTML = top.map(k=>{ const pc = Math.round(fp.c[k]/fp.total*100); return `<div class="stat"><b>${ECON[k].n}</b><div class="tr"><i style="width:${pc}%;background:${ECON[k].c}"></i></div><em>${pc}%</em></div>`; }).join('') + `<div class="stat" style="margin-top:8px"><span style="grid-column:1/-1;color:var(--ink2)">${ofPerson(c.p).length} touchpoints in one day</span></div>`;
+  $('iGo').textContent = 'Follow ' + P.n.split(' ')[0] + '’s day →';
+  $('roster').querySelectorAll('button').forEach((b,i)=>b.setAttribute('aria-pressed', i===iIdx));
+  if (full){ const sp = $('spin'); sp.classList.remove('full'); void sp.offsetWidth; sp.classList.add('full'); setTimeout(()=>sp.classList.remove('full'), 1150); }
+}
+$('roster').innerHTML = CAST_INTRO.map((c,i)=>`<button type="button" style="background-image:url(assets/${c.head}.png)" aria-label="${esc(PEOPLE[c.p].n)}"><span>${esc(PEOPLE[c.p].n.split(' ')[0])}</span></button>`).join('');
+$('roster').querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{ iIdx=i; introRender(true); });
+$('iPrev').onclick = () => { iIdx = (iIdx+CAST_INTRO.length-1)%CAST_INTRO.length; introRender(true); };
+$('iNext').onclick = () => { iIdx = (iIdx+1)%CAST_INTRO.length; introRender(true); };
+function closeIntro(){ $('intro').classList.add('hide'); $('intro').setAttribute('aria-hidden','true'); }
+$('iGo').onclick = () => { const p = CAST_INTRO[iIdx].p; const a = ofPerson(p)[0]; closeIntro(); if (a) select(a); };
+$('iSkip').onclick = () => { closeIntro(); t = 600; setView(true); };
+$('meetBtn').onclick = () => { stop(); $('intro').classList.remove('hide'); $('intro').setAttribute('aria-hidden','false'); introRender(true); };
+addEventListener('keydown', e => { if ($('intro').classList.contains('hide')) return; if (e.key==='ArrowRight') $('iNext').click(); if (e.key==='ArrowLeft') $('iPrev').click(); if (e.key==='Escape') $('iSkip').click(); }, true);
+
+/* ---------- header clock + everyone view ---------- */
+const HOME_BED = {thatha:'tpbed', paati:'tpbed', appa:'adbed', amma:'adbed', ananya:'ananya', madhav:'madhav'};
+let viewAll = false;
+function curTime(){ const c = selected(); return viewAll ? t : (c ? c.m : t); }
+function drawClock(){
+  const m = curTime(); const hh = (m/60)%12, mm = m%60;
+  $('hHr').setAttribute('transform', `rotate(${hh*30} 20 20)`); $('hMn').setAttribute('transform', `rotate(${mm*6} 20 20)`);
+  $('hTime').innerHTML = fmt(m) + '<small>Thursday</small>';
+  if (document.activeElement !== $('hRange')) $('hRange').value = m;
+}
+function stops(){ return viewAll ? [...new Set(tps.map(x=>x.m))].sort((a,b)=>a-b) : ofPerson(focus).map(x=>x.m); }
+function nearest(m){ const st = stops(); let best = st[0]; for (const v of st) if (Math.abs(v-m) < Math.abs(best-m)) best = v; return best ?? m; }
+function setTime(m){
+  m = nearest(Math.max(START, Math.min(END, m)));
+  if (viewAll){ t = m; renderAll(); drawClock(); return; }
+  const x = ofPerson(focus).find(y=>y.m===m);
+  if (x && x.id !== selId){ selId = x.id; t = x.m; renderStageCard(); positionHead();
+    const sc = $('tracks').querySelector('.scrub'); if (sc && document.activeElement !== sc) sc.value = t;
+    if ($('drawer').classList.contains('open')) fillForm(x); }
+  drawClock();
+}
+function stepTime(dir){
+  const st = stops(), m = curTime();
+  const next = dir > 0 ? st.find(v=>v>m) : [...st].reverse().find(v=>v<m);
+  if (next != null) setTime(next);
+}
+$('hRange').addEventListener('input', () => { stop(); setTime(+$('hRange').value); });
+$('hRange').addEventListener('change', () => { $('hRange').value = curTime(); });
+$('hBack').onclick = () => { stop(); stepTime(-1); };
+$('hFwd').onclick = () => { stop(); stepTime(1); };
+function setView(all){
+  viewAll = all; document.body.classList.toggle('all', all);
+  $('vOne').setAttribute('aria-pressed', !all); $('vAll').setAttribute('aria-pressed', all);
+  if (all){ stop(); const c = selected(); if (c) t = c.m; renderAll(); } else { render(); }
+  drawClock();
+}
+$('vOne').onclick = () => setView(false);
+$('fixAllBtn').onclick = () => { fixAll = !fixAll; if (!fixAll) for (const k in fixed) delete fixed[k]; syncFixBtn(); render(); };
+$('vAll').onclick = () => setView(true);
+function stateAt(p, m){
+  const sl = SLEEP[p];
+  if (sl && (m < sl[0] || m >= sl[1])) return {asleep:true};
+  const o = activeFor(p, m);
+  if (!o) return {asleep:true};
+  return {o};
+}
+function renderAll(){
+  const m = t, sc = SCENES.home, dim = DIMS[sc.img], R = dim[0]/dim[1];
+  $('houseinner').style.setProperty('--r', R);
+  $('allclock').innerHTML = `<small>Thursday</small>${fmt(m)}`;
+  const layer = $('allfigs'); layer.innerHTML = '';
+  const used = {}, away = [], asleep = [], byZone = {};
+  const slotX = zone => { const z = sc.zones[zone]; const i = used[zone] = (used[zone]||0); used[zone]++;
+    return z.slots[Math.min(i, z.slots.length-1)] + (i >= z.slots.length ? 3*(i-z.slots.length+1) : 0); };
+  for (const p of people()){
+    const st = stateAt(p, m);
+    if (st.asleep){ asleep.push(p); continue; }
+    const o = st.o;
+    if (o.place !== 'home'){ away.push(o); continue; }
+    const z = sc.zones[o.zone], x = slotX(o.zone);
+    const fig = placeFigure(layer, R, z, x, o.pose, o.eco, true);
+    if (fig) fig.onclick = () => { setView(false); select(o); };
+    (byZone[o.zone] ||= []).push({p, o, z, x});
+  }
+  for (const [zk, list] of Object.entries(byZone)){
+    const z = list[0].z, top = Math.max(0.5, z.floor - z.h*Math.max(...list.map(e=>(POSE[e.o.pose]||{s:1}).s)) - 3.6);
+    const groups = list.length > 2 ? [list] : list.map(e=>[e]);
+    for (const g of groups){
+      const tag = document.createElement('div'); tag.className='nametag';
+      tag.style.left = (g.reduce((a,e)=>a+e.x,0)/g.length) + '%'; tag.style.top = top + '%';
+      tag.innerHTML = g.map(e=>`<span data-id="${esc(e.o.id)}" title="${esc(fmt(e.o.m)+' · '+e.o.title)}" style="cursor:pointer"><i style="background:${ecoBg(e.o.eco)}"></i>${esc(PEOPLE[e.p].n.split(' ')[0])}</span>`).join(' &nbsp;');
+      tag.querySelectorAll('span').forEach(sp => sp.onclick = () => { setView(false); select(tps.find(x=>x.id===sp.dataset.id)); });
+      layer.appendChild(tag);
+    }
+  }
+  const beds = {};
+  for (const p of asleep){
+    (beds[HOME_BED[p]] ||= []).push(PEOPLE[p].n.split(' ')[0]);
+    const pose = p + '_sleep';
+    if (DIMS[pose] && POSE[pose]){ const zk = HOME_BED[p], z = sc.zones[zk]; placeFigure(layer, R, z, slotX(zk), pose, [], false); }
+    else if (p === 'ananya'){ const z = sc.zones.ananya; placeFigure(layer, R, z, slotX('ananya'), 'ananya_sleeping', [], false); }
+  }
+  for (const [zk, names] of Object.entries(beds)){
+    const z = sc.zones[zk];
+    const tag = document.createElement('div'); tag.className='nametag'; tag.style.opacity='.85';
+    tag.style.left = z.slots[0] + '%'; tag.style.top = (z.floor - z.h*0.5 - 4) + '%';
+    tag.textContent = '☾ ' + names.join(' & ') + ' · asleep'; layer.appendChild(tag);
+  }
+  $('awaysub').textContent = away.length ? `${away.length} of ${people().length} are out at ${fmt(m)}. Click anyone to follow their day.` : `Everyone is at home at ${fmt(m)}.`;
+  $('awaylist').innerHTML = away.map(o => {
+    const s2 = SCENES[o.place];
+    return `<button type="button" class="acard" data-id="${esc(o.id)}"><div class="thumb" style="background-image:url(assets/${s2.img}.png)"><img src="assets/${o.pose}.png" alt=""></div>
+      <div><b>${esc(PEOPLE[o.who].n)}</b><div class="where">${esc(s2.n)} · since ${fmt(o.m)}</div><div class="what">${esc(o.title)}</div>
+      <div class="dots">${o.eco.map(k=>`<span style="background:${ECON[k].c}" title="${ECON[k].n}"></span>`).join('')}</div></div></button>`;
+  }).join('');
+  $('awaylist').querySelectorAll('.acard').forEach(b => b.onclick = () => { const o = tps.find(x=>x.id===b.dataset.id); setView(false); select(o); });
+  $('asleep').textContent = asleep.length ? 'Asleep: ' + asleep.map(p=>PEOPLE[p].n.split(' ')[0]).join(', ') : '';
+}
+addEventListener('resize', () => { if (viewAll) renderAll(); });
+
+renderLegend();
+tps = clean(SEED); t = tps.length ? ofPerson(focus)[0].m : START; render(); introRender(true);
+
+(async () => {
+  let db = null;
+  try { const w = window.claude; db = w && w.use ? await w.use('db') : null; } catch(_){ db = null; }
+  try { const w = window.claude; userCap = w && w.use ? await w.use('user') : null; } catch(_){ userCap = null; }
+  if (!db){ canWrite = false; $('banner').style.display='none'; const eb=document.querySelector('[id*=edit i],.editbtn'); if(eb) eb.style.display='none'; return; }
+  dbRef = db.collection('touchpoints');
+  try { const c = userCap && await userCap.can('data.write'); canWrite = c !== false; } catch(_){ canWrite = true; }
+  const timer = setTimeout(()=>{ $('banner').textContent = 'Can’t reach the shared version yet, so this may be out of date.'; }, 10000);
+  let first = true;
+  dbRef.onSnapshot(snap => {
+    if (!snap.metadata.fromCache){ clearTimeout(timer); if ($('banner').textContent.startsWith('Can’t')) $('banner').textContent=''; }
+    const raw = snap.docs.map(d => ({id:d.id, ...d.data()}));
+    if (!raw.length && snap.metadata.fromCache) return;
+    tps = clean(raw);
+    if (first){ first = false; const a = ofPerson(focus)[0] || tps[0]; if (a){ focus=a.who; t=a.m; selId=a.id; } }
+    render(); resolveNames();
+    if (!canWrite) $('banner').textContent = 'You can explore this page. To edit touchpoints, ask Arun to share it with you as an Editor.';
+  }, err => { clearTimeout(timer); $('banner').textContent = 'The shared version isn’t available right now, so this shows the saved story.'; useSeed($('banner').textContent); });
+})();
+</script>
+</body>
+</html>
